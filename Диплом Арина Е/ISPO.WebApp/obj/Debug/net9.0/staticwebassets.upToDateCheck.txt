@@ -1,0 +1,4 @@
+C:\Users\Иван\OneDrive\Рабочий стол\Диплом\Диплом Арина Е\ISPO.WebApp\wwwroot\css\app.css
+C:\Users\Иван\OneDrive\Рабочий стол\Диплом\Диплом Арина Е\ISPO.WebApp\wwwroot\js\landing.js
+wwwroot\css\app.css
+wwwroot\js\landing.js

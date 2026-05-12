@@ -1,0 +1,118 @@
+﻿@model AdminEnrollmentsViewModel
+@{
+    ViewData["Title"] = "Зачисления";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Новое зачисление</h2>
+        <a class="btn ghost" asp-action="Index">Назад в панель</a>
+    </div>
+
+    <form asp-action="CreateEnrollment" method="post" class="grid-form">
+        <div class="input-block">
+            <label asp-for="Form.StudentId">Студент</label>
+            <select asp-for="Form.StudentId">
+                @if (Model.Students.Count == 0)
+                {
+                    <option value="">Нет свободных студентов</option>
+                }
+                else
+                {
+                    <option value="">Выберите студента</option>
+                    @foreach (var student in Model.Students)
+                    {
+                        <option value="@student.Id">@student.LastName @student.FirstName (@student.Group.GroupCode)</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Form.StudentId" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.CourseId">Курс</label>
+            <select asp-for="Form.CourseId">
+                <option value="">Выберите курс</option>
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.Id">@course.CourseCode - @course.Title</option>
+                }
+            </select>
+            <span asp-validation-for="Form.CourseId" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Status">Статус</label>
+            <select asp-for="Form.Status">
+                <option value="active">Активно</option>
+                <option value="completed">Завершено</option>
+                <option value="cancelled">Отменено</option>
+            </select>
+            <span asp-validation-for="Form.Status" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Зачислить</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Список зачислений</h2>
+        <div class="chips">
+            <a class="chip @(Model.StatusFilter is null ? "active" : string.Empty)" asp-action="Enrollments">Все</a>
+            <a class="chip @(Model.StatusFilter == "active" ? "active" : string.Empty)" asp-action="Enrollments" asp-route-status="active">Активно</a>
+            <a class="chip @(Model.StatusFilter == "completed" ? "active" : string.Empty)" asp-action="Enrollments" asp-route-status="completed">Завершено</a>
+            <a class="chip @(Model.StatusFilter == "cancelled" ? "active" : string.Empty)" asp-action="Enrollments" asp-route-status="cancelled">Отменено</a>
+        </div>
+    </div>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Студент</th>
+                <th>Группа</th>
+                <th>Курс</th>
+                <th>Преподаватель</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr>
+                    <td colspan="7">Зачисления отсутствуют.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var row in Model.Items)
+                {
+                    <tr>
+                        <td>@row.StudentName</td>
+                        <td>@row.GroupCode</td>
+                        <td>@row.CourseTitle</td>
+                        <td>@row.TeacherName</td>
+                        <td>@row.EnrolledAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <form asp-action="UpdateEnrollmentStatus" method="post">
+                                <input type="hidden" name="id" value="@row.Id" />
+                                <select name="status" onchange="this.form.submit()">
+                                    <option value="active" selected="@(row.Status == "active")">Активно</option>
+                                    <option value="completed" selected="@(row.Status == "completed")">Завершено</option>
+                                    <option value="cancelled" selected="@(row.Status == "cancelled")">Отменено</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-action="DeleteEnrollment" method="post" onsubmit="return confirm('Удалить зачисление?');">
+                                <input type="hidden" name="id" value="@row.Id" />
+                                <button type="submit" class="btn danger small">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+

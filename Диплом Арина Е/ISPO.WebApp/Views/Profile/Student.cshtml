@@ -1,0 +1,86 @@
+﻿@model StudentProfileViewModel
+@{
+    ViewData["Title"] = "Профиль ученика";
+}
+
+@if (!Model.ProfileFound)
+{
+    <section class="flash flash-error">
+        Профиль ученика не найден. Обратитесь к администратору.
+    </section>
+}
+else
+{
+    <section class="dashboard-grid">
+        <article class="stat-card">
+            <span>Активные курсы</span>
+            <strong>@Model.ActiveCourses</strong>
+            <small>Текущие зачисления</small>
+        </article>
+        <article class="stat-card">
+            <span>Нужно проверить</span>
+            <strong>@Model.PendingSubmissions</strong>
+            <small>Работы ожидают ответ</small>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Редактирование профиля</h2>
+            <a class="btn ghost" asp-controller="Student" asp-action="Index">Назад в кабинет</a>
+        </div>
+
+        <div class="actions-strip">
+            <a class="btn ghost" asp-controller="Profile" asp-action="StudentSiteSettings">Настройки сайта</a>
+            <a class="btn ghost" asp-controller="Student" asp-action="Submissions">Мои работы</a>
+        </div>
+
+        <form asp-action="Student" method="post" class="grid-form profile-edit-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="input-block">
+                <label asp-for="Form.LastName">Фамилия</label>
+                <input asp-for="Form.LastName" />
+                <span asp-validation-for="Form.LastName" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.FirstName">Имя</label>
+                <input asp-for="Form.FirstName" />
+                <span asp-validation-for="Form.FirstName" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.MiddleName">Отчество</label>
+                <input asp-for="Form.MiddleName" />
+                <span asp-validation-for="Form.MiddleName" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.BirthDate">Дата рождения</label>
+                <input asp-for="Form.BirthDate" type="date" />
+                <span asp-validation-for="Form.BirthDate" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.Email">Электронная почта</label>
+            <input asp-for="Form.Email" placeholder="name.surname@spbstu.ru" />
+                <span asp-validation-for="Form.Email" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.Phone">Телефон</label>
+                <input asp-for="Form.Phone" />
+                <span asp-validation-for="Form.Phone" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.NewPassword">Новый пароль</label>
+                <input asp-for="Form.NewPassword" type="password" />
+                <span asp-validation-for="Form.NewPassword" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.ConfirmPassword">Подтверждение пароля</label>
+                <input asp-for="Form.ConfirmPassword" type="password" />
+                <span asp-validation-for="Form.ConfirmPassword" class="field-validation"></span>
+            </div>
+            <div class="input-block actions-row">
+                <button type="submit" class="btn primary">Сохранить профиль</button>
+            </div>
+        </form>
+    </section>
+}

@@ -1,0 +1,216 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model TeacherPanelViewModel
+@{
+    ViewData["Title"] = "Панель преподавателя";
+
+    var prevAnchor = Model.Calendar.ViewMode == "month"
+        ? Model.Calendar.AnchorDate.AddMonths(-1)
+        : Model.Calendar.AnchorDate.AddDays(-7);
+    var nextAnchor = Model.Calendar.ViewMode == "month"
+        ? Model.Calendar.AnchorDate.AddMonths(1)
+        : Model.Calendar.AnchorDate.AddDays(7);
+    var weekDays = new[] { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
+}
+
+<section class="dashboard-grid">
+    <article class="stat-card">
+        <span>Мои студенты</span>
+        <strong>@Model.StudentsCount</strong>
+        <small>Уникальные обучающиеся</small>
+    </article>
+    <article class="stat-card">
+        <span>Мои курсы</span>
+        <strong>@Model.CoursesCount</strong>
+        <small>Активные программы</small>
+    </article>
+    <article class="stat-card">
+        <span>Мои группы</span>
+        <strong>@Model.GroupsCount</strong>
+        <small>Закрепленные группы</small>
+    </article>
+    <article class="stat-card">
+        <span>Занятия</span>
+        <strong>@Model.LessonsCount</strong>
+        <small>Всего в расписании</small>
+    </article>
+    <article class="stat-card accent">
+        <span>На ближайшие 7 дней</span>
+        <strong>@Model.LessonsThisWeek</strong>
+        <small>План занятий</small>
+    </article>
+    <article class="stat-card">
+        <span>Уроки онлайн</span>
+        <strong>@Model.LiveLessonsCount</strong>
+        <small>Идут занятия</small>
+    </article>
+    <article class="stat-card">
+        <span>Работы на проверке</span>
+        <strong>@Model.PendingSubmissionsCount</strong>
+        <small>Ожидают комментарий</small>
+    </article>
+</section>
+
+<section class="actions-strip">
+    <a class="btn primary" asp-action="Lessons">Управление уроками</a>
+    <a class="btn primary" asp-action="Submissions">Проверка работ</a>
+    <a class="btn ghost" asp-action="Courses">Мои курсы</a>
+    <a class="btn ghost" asp-controller="Support" asp-action="Index">Поддержка</a>
+    <a class="btn ghost" asp-controller="Profile" asp-action="Teacher">Профиль</a>
+    <a class="btn ghost" asp-controller="Profile" asp-action="TeacherSiteSettings">Настройки сайта</a>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Календарь уроков</h2>
+        <div class="calendar-view-switch">
+            <a class="btn @(Model.Calendar.ViewMode == "week" ? "primary" : "ghost") small"
+               asp-action="Index"
+               asp-route-calendarView="week"
+               asp-route-calendarDate="@Model.Calendar.AnchorDate.ToString("yyyy-MM-dd")"
+               asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+               asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Неделя</a>
+            <a class="btn @(Model.Calendar.ViewMode == "month" ? "primary" : "ghost") small"
+               asp-action="Index"
+               asp-route-calendarView="month"
+               asp-route-calendarDate="@Model.Calendar.AnchorDate.ToString("yyyy-MM-dd")"
+               asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+               asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Месяц</a>
+        </div>
+    </div>
+
+    <form method="get" asp-action="Index" class="calendar-toolbar">
+        <input type="hidden" name="calendarView" value="@Model.Calendar.ViewMode" />
+        <label class="calendar-field">
+            <span>Опорная дата</span>
+            <input type="date" name="calendarDate" value="@Model.Calendar.AnchorDate.ToString("yyyy-MM-dd")" />
+        </label>
+        <label class="calendar-field">
+            <span>Курс</span>
+            <select name="calendarCourseId">
+                <option value="">Все курсы</option>
+                @foreach (var course in Model.Calendar.Courses)
+                {
+                    if (Model.Calendar.SelectedCourseId == course.Id)
+                    {
+                        <option value="@course.Id" selected>@course.Label</option>
+                    }
+                    else
+                    {
+                        <option value="@course.Id">@course.Label</option>
+                    }
+                }
+            </select>
+        </label>
+        <label class="calendar-field">
+            <span>Группа</span>
+            <select name="calendarGroupId">
+                <option value="">Все группы</option>
+                @foreach (var group in Model.Calendar.Groups)
+                {
+                    if (Model.Calendar.SelectedGroupId == group.Id)
+                    {
+                        <option value="@group.Id" selected>@group.Label</option>
+                    }
+                    else
+                    {
+                        <option value="@group.Id">@group.Label</option>
+                    }
+                }
+            </select>
+        </label>
+        <button type="submit" class="btn primary">Применить</button>
+    </form>
+
+    <div class="calendar-nav">
+        <a class="btn ghost small"
+           asp-action="Index"
+           asp-route-calendarView="@Model.Calendar.ViewMode"
+           asp-route-calendarDate="@prevAnchor.ToString("yyyy-MM-dd")"
+           asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+           asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Назад</a>
+        <strong>@Model.Calendar.RangeLabel</strong>
+        <a class="btn ghost small"
+           asp-action="Index"
+           asp-route-calendarView="@Model.Calendar.ViewMode"
+           asp-route-calendarDate="@nextAnchor.ToString("yyyy-MM-dd")"
+           asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+           asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Вперед</a>
+    </div>
+
+    @if (Model.Calendar.ViewMode == "month")
+    {
+        <div class="calendar-weekhead">
+            @foreach (var day in weekDays)
+            {
+                <span>@day</span>
+            }
+        </div>
+    }
+
+    <div class="lesson-calendar-grid @(Model.Calendar.ViewMode == "month" ? "month-mode" : "week-mode")">
+        @foreach (var day in Model.Calendar.Days)
+        {
+            <article class="calendar-day @(day.IsToday ? "is-today" : string.Empty) @(day.IsCurrentPeriod ? string.Empty : "is-outside")">
+                <header>
+                    <span>@day.Date.ToString("dd.MM")</span>
+                    <small>@day.Date.ToString("ddd")</small>
+                </header>
+                @if (day.Lessons.Count == 0)
+                {
+                    <p class="calendar-empty">Нет уроков</p>
+                }
+                else
+                {
+                    foreach (var lesson in day.Lessons)
+                    {
+                        <a class="calendar-lesson @UiText.LessonStatusBadgeClass(lesson.LiveStatus)"
+                           asp-action="EditLesson"
+                           asp-route-scheduleId="@lesson.ScheduleId">
+                            <strong>@lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")</strong>
+                            <span>@lesson.CourseTitle</span>
+                            <small>@lesson.GroupCode · @UiText.LessonStatus(lesson.LiveStatus)</small>
+                        </a>
+                    }
+                }
+            </article>
+        }
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Ближайшие занятия</h2>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Курс</th>
+                <th>Группа</th>
+                <th>Тема</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.UpcomingLessons.Count == 0)
+            {
+                <tr><td colspan="6">Нет запланированных занятий.</td></tr>
+            }
+            else
+            {
+                foreach (var lesson in Model.UpcomingLessons)
+                {
+                    <tr>
+                        <td>@lesson.LessonDate.ToString("dd.MM.yyyy")</td>
+                        <td>@lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")</td>
+                        <td>@lesson.CourseTitle</td>
+                        <td>@lesson.GroupCode</td>
+                        <td>@(string.IsNullOrWhiteSpace(lesson.Topic) ? "-" : lesson.Topic)</td>
+                        <td><span class="badge @UiText.LessonStatusBadgeClass(lesson.LiveStatus)">@UiText.LessonStatus(lesson.LiveStatus)</span></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+

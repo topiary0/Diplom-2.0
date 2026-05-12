@@ -1,0 +1,85 @@
+﻿@model AdminGroupsViewModel
+@{
+    ViewData["Title"] = "Группы";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Добавить группу</h2>
+        <a class="btn ghost" asp-action="Index">Назад в панель</a>
+    </div>
+    <form asp-action="CreateGroup" method="post" class="grid-form">
+        <div class="input-block">
+            <label asp-for="Form.GroupCode">Код группы</label>
+            <input asp-for="Form.GroupCode" />
+            <span asp-validation-for="Form.GroupCode" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Name">Название</label>
+            <input asp-for="Form.Name" />
+            <span asp-validation-for="Form.Name" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Specialization">Специализация</label>
+            <input asp-for="Form.Specialization" />
+            <span asp-validation-for="Form.Specialization" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.StartYear">Год набора</label>
+            <input asp-for="Form.StartYear" type="number" />
+            <span asp-validation-for="Form.StartYear" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Добавить</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Список групп</h2>
+    <table class="table-modern align-cols">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Название</th>
+                <th>Специализация</th>
+                <th>Год</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Groups.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">Группы отсутствуют.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var group in Model.Groups)
+                {
+                    <tr>
+                        <td>
+                            <form asp-action="UpdateGroup" method="post" id="group-edit-@group.Id" class="table-inline-form">
+                                <input type="hidden" name="id" value="@group.Id" />
+                                <input name="groupCode" value="@group.GroupCode" />
+                            </form>
+                        </td>
+                        <td><input name="name" value="@group.Name" form="group-edit-@group.Id" /></td>
+                        <td><input name="specialization" value="@group.Specialization" form="group-edit-@group.Id" /></td>
+                        <td><input name="startYear" type="number" value="@group.StartYear" form="group-edit-@group.Id" /></td>
+                        <td class="row-actions">
+                            <button type="submit" class="btn ghost small" form="group-edit-@group.Id">Сохранить</button>
+                            <form asp-action="DeleteGroup" method="post" onsubmit="return confirm('Удалить группу?');">
+                                <input type="hidden" name="id" value="@group.Id" />
+                                <button type="submit" class="btn danger small">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+

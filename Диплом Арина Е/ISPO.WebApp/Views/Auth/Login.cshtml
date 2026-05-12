@@ -1,0 +1,63 @@
+﻿@model LoginViewModel
+@{
+    Layout = null;
+    var themeClass = (Context.Request.Cookies["ISPO.SiteTheme"] ?? "light").Trim().ToLowerInvariant() == "dark"
+        ? "theme-dark"
+        : "theme-light";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход в систему ИСПО</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+</head>
+<body class="auth-body @themeClass">
+    <div class="auth-orb auth-orb-a"></div>
+    <div class="auth-orb auth-orb-b"></div>
+
+    <main class="auth-shell auth-login-shell">
+        <section class="auth-side auth-side-rich auth-login-side">
+            <span class="eyebrow">ИСПО СПбПУ</span>
+            <h1>Единая информационная система ИСПО СПбПУ</h1>
+            <p class="auth-side-text">
+                Организация учебного процесса в одном веб - приложении.
+            </p>
+            <div class="auth-checklist">
+                <div>Удобный доступ к расписанию и онлайн-занятиям</div>
+                <div>Быстрый обмен материалами между преподавателем и студентом</div>
+                <div>Контроль сдачи и проверки работ в реальном времени</div>
+            </div>
+        </section>
+
+        <section class="auth-card auth-card-glass auth-login-card">
+            <div class="auth-card-head">
+                <h2>Вход в систему</h2>
+                <p>Введите электронную почту и пароль от вашей учетной записи.</p>
+            </div>
+
+            <form asp-action="Login" method="post" class="auth-form">
+                <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                <div class="auth-input">
+                    <label asp-for="Email">Электронная почта</label>
+                    <input asp-for="Email" autocomplete="username" placeholder="name.surname@spbstu.ru" />
+                    <span asp-validation-for="Email" class="field-validation"></span>
+                </div>
+
+                <div class="auth-input">
+                    <label asp-for="Password">Пароль</label>
+                    <input asp-for="Password" type="password" autocomplete="current-password" placeholder="Введите пароль" />
+                    <span asp-validation-for="Password" class="field-validation"></span>
+                </div>
+
+                <button type="submit" class="btn primary auth-submit-btn">Войти</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

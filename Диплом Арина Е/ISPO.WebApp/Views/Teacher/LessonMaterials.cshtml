@@ -1,0 +1,92 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model TeacherLessonMaterialsViewModel
+@{
+    ViewData["Title"] = "Материалы урока";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>@Model.CourseTitle - @Model.GroupCode - @Model.LessonDate.ToString("dd.MM.yyyy")</h2>
+        <a class="btn ghost" asp-action="Lessons">Назад к урокам</a>
+    </div>
+    <p>@(string.IsNullOrWhiteSpace(Model.Topic) ? "Тема не указана." : Model.Topic)</p>
+
+    <form asp-action="AddLessonMaterial" asp-route-scheduleId="@Model.ScheduleId" method="post" class="grid-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <input type="hidden" asp-for="Form.ScheduleId" />
+
+        <div class="input-block">
+            <label asp-for="Form.Title">Название</label>
+            <input asp-for="Form.Title" />
+            <span asp-validation-for="Form.Title" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.MaterialType">Тип</label>
+            <select asp-for="Form.MaterialType">
+                <option value="task">Задание</option>
+                <option value="methodic">Методичка</option>
+                <option value="reference">Справка</option>
+            </select>
+            <span asp-validation-for="Form.MaterialType" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.CloudUrl">Ссылка</label>
+            <input asp-for="Form.CloudUrl" placeholder="https://..." />
+            <span asp-validation-for="Form.CloudUrl" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.SortOrder">Порядок</label>
+            <input asp-for="Form.SortOrder" type="number" />
+            <span asp-validation-for="Form.SortOrder" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Добавить материал</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Список материалов</h2>
+    <table class="table-modern align-cols">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Тип</th>
+                <th>Ссылка</th>
+                <th>Порядок</th>
+                <th>Добавлен</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Materials.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">Материалов пока нет.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var material in Model.Materials)
+                {
+                    <tr>
+                        <td>@material.Title</td>
+                        <td>@UiText.MaterialType(material.MaterialType)</td>
+                        <td><a href="@material.CloudUrl" target="_blank" rel="noopener noreferrer">Открыть</a></td>
+                        <td>@material.SortOrder</td>
+                        <td>@material.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <form asp-action="DeleteLessonMaterial"
+                                  asp-route-scheduleId="@Model.ScheduleId"
+                                  asp-route-id="@material.Id"
+                                  method="post"
+                                  onsubmit="return confirm('Удалить материал?');">
+                                <button type="submit" class="btn danger small">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

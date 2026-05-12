@@ -1,0 +1,44 @@
+﻿@model StudentSiteSettingsViewModel
+@{
+    ViewData["Title"] = "Настройки сайта ученика";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Настройки сайта</h2>
+        <a class="btn ghost" asp-controller="Student" asp-action="Index">Назад в кабинет</a>
+    </div>
+
+    <div class="actions-strip">
+        <a class="btn ghost" asp-controller="Profile" asp-action="Student">Профиль</a>
+        <a class="btn ghost" asp-controller="Student" asp-action="Submissions">Мои работы</a>
+    </div>
+
+    <form asp-action="StudentSiteSettings" method="post" class="grid-form profile-edit-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="input-block">
+            <label asp-for="Form.Theme">Тема оформления</label>
+            <select asp-for="Form.Theme">
+                <option value="light">Светлая</option>
+                <option value="dark">Темная</option>
+            </select>
+            <span asp-validation-for="Form.Theme" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.InterfaceMode">Плотность интерфейса</label>
+            <select asp-for="Form.InterfaceMode">
+                <option value="normal">Стандартная</option>
+                <option value="compact">Компактная</option>
+            </select>
+            <span asp-validation-for="Form.InterfaceMode" class="field-validation"></span>
+        </div>
+
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Сохранить настройки</button>
+        </div>
+    </form>
+</section>
+
+

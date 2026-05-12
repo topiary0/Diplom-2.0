@@ -1,0 +1,70 @@
+@model NewsPageViewModel
+@{
+    ViewData["Title"] = "Новости";
+}
+
+@if (Model.CanManageNews)
+{
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Публикация новости</h2>
+        </div>
+
+        <form asp-controller="News" asp-action="Create" method="post" enctype="multipart/form-data" class="grid-form profile-edit-form news-create-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="input-block full">
+                <label asp-for="NewsForm.Body">Текст новости</label>
+                <textarea asp-for="NewsForm.Body" rows="4" placeholder="Введите текст новости"></textarea>
+                <span asp-validation-for="NewsForm.Body" class="field-validation"></span>
+            </div>
+
+            <div class="input-block">
+                <label for="NewsImage">Фотография</label>
+                <input id="NewsImage" name="newsImage" type="file" accept=".jpg,.jpeg,.jfif,.png,.webp,image/jpeg,image/pjpeg,image/png,image/webp,image/*" />
+                <span class="field-validation">@Html.ValidationMessage("NewsImage")</span>
+            </div>
+
+            <div class="input-block actions-row">
+                <button type="submit" class="btn primary">Опубликовать новость</button>
+            </div>
+        </form>
+    </section>
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Лента новостей</h2>
+    </div>
+
+    @if (Model.News.Count == 0)
+    {
+        <section class="flash">Новостей пока нет.</section>
+    }
+    else
+    {
+        <div class="news-grid">
+            @foreach (var news in Model.News)
+            {
+                <article class="news-card">
+                    @if (!string.IsNullOrWhiteSpace(news.ImageUrl))
+                    {
+                        <img src="@news.ImageUrl" alt="Фото к новости" class="news-card__image" />
+                    }
+                    <p class="news-card__body">@news.Body</p>
+                    <div class="news-card__meta">
+                        <span>@(string.IsNullOrWhiteSpace(news.CreatedBy) ? "Администратор" : news.CreatedBy)</span>
+                        <span>@news.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
+
+                    @if (Model.CanManageNews)
+                    {
+                        <form asp-controller="News" asp-action="Delete" asp-route-id="@news.Id" method="post">
+                            <button type="submit" class="btn danger small">Удалить</button>
+                        </form>
+                    }
+                </article>
+            }
+        </div>
+    }
+</section>

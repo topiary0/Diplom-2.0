@@ -1,0 +1,702 @@
+{
+  "Version": 1,
+  "Hash": "POr3ws5G3Ct7xyrjSS4wQVbXuH26skWjeWrIzm+ipcU=",
+  "Source": "ISPO.WebApp",
+  "BasePath": "_content/ISPO.WebApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ISPO.WebApp\\wwwroot",
+      "Source": "ISPO.WebApp",
+      "ContentRoot": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\",
+      "BasePath": "_content/ISPO.WebApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\1khk1l1sk8-arqgftwnzi.gz",
+      "SourceId": "ISPO.WebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/ISPO.WebApp",
+      "RelativePath": "css/app#[.{fingerprint=arqgftwnzi}]?.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\css\\app.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "yp57qalcsx",
+      "Integrity": "tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\css\\app.css"
+    },
+    {
+      "Identity": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\4bxhmt05l3-i43n64p33p.gz",
+      "SourceId": "ISPO.WebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/ISPO.WebApp",
+      "RelativePath": "js/landing#[.{fingerprint=i43n64p33p}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\js\\landing.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "jmtmgy0l0w",
+      "Integrity": "e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\js\\landing.js"
+    },
+    {
+      "Identity": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\css\\app.css",
+      "SourceId": "ISPO.WebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\",
+      "BasePath": "_content/ISPO.WebApp",
+      "RelativePath": "css/app#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "arqgftwnzi",
+      "Integrity": "ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\app.css"
+    },
+    {
+      "Identity": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\js\\landing.js",
+      "SourceId": "ISPO.WebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\",
+      "BasePath": "_content/ISPO.WebApp",
+      "RelativePath": "js/landing#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "i43n64p33p",
+      "Integrity": "khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\landing.js"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "css/app.arqgftwnzi.css",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\1khk1l1sk8-arqgftwnzi.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000102417042"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9763"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 12 May 2026 17:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "arqgftwnzi"
+        },
+        {
+          "Name": "label",
+          "Value": "css/app.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA="
+        }
+      ]
+    },
+    {
+      "Route": "css/app.arqgftwnzi.css",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\css\\app.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "50927"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 12 May 2026 17:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "arqgftwnzi"
+        },
+        {
+          "Name": "label",
+          "Value": "css/app.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA="
+        }
+      ]
+    },
+    {
+      "Route": "css/app.arqgftwnzi.css.gz",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\1khk1l1sk8-arqgftwnzi.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9763"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 12 May 2026 17:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "arqgftwnzi"
+        },
+        {
+          "Name": "label",
+          "Value": "css/app.css.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY="
+        }
+      ]
+    },
+    {
+      "Route": "css/app.css",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\1khk1l1sk8-arqgftwnzi.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000102417042"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9763"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 12 May 2026 17:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA="
+        }
+      ]
+    },
+    {
+      "Route": "css/app.css",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\css\\app.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "50927"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 12 May 2026 17:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA="
+        }
+      ]
+    },
+    {
+      "Route": "css/app.css.gz",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\1khk1l1sk8-arqgftwnzi.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9763"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 12 May 2026 17:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-tioxkWGSySJBXNJOa0TxjiyBAWvkWkxhqih4v7LBtiY="
+        }
+      ]
+    },
+    {
+      "Route": "js/landing.i43n64p33p.js",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\4bxhmt05l3-i43n64p33p.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001893939394"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "527"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Apr 2026 21:34:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "i43n64p33p"
+        },
+        {
+          "Name": "label",
+          "Value": "js/landing.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4="
+        }
+      ]
+    },
+    {
+      "Route": "js/landing.i43n64p33p.js",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\js\\landing.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1407"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Apr 2026 21:34:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "i43n64p33p"
+        },
+        {
+          "Name": "label",
+          "Value": "js/landing.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4="
+        }
+      ]
+    },
+    {
+      "Route": "js/landing.i43n64p33p.js.gz",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\4bxhmt05l3-i43n64p33p.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "527"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Apr 2026 21:34:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "i43n64p33p"
+        },
+        {
+          "Name": "label",
+          "Value": "js/landing.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw="
+        }
+      ]
+    },
+    {
+      "Route": "js/landing.js",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\4bxhmt05l3-i43n64p33p.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001893939394"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "527"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Apr 2026 21:34:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4="
+        }
+      ]
+    },
+    {
+      "Route": "js/landing.js",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\wwwroot\\js\\landing.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1407"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Apr 2026 21:34:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-khX/D/gonqtlR6GitER5pN+rh8RmEBpKiLjXck8Ebx4="
+        }
+      ]
+    },
+    {
+      "Route": "js/landing.js.gz",
+      "AssetFile": "C:\\Users\\Иван\\OneDrive\\Рабочий стол\\Диплом\\Диплом Арина Е\\ISPO.WebApp\\obj\\Debug\\net9.0\\compressed\\4bxhmt05l3-i43n64p33p.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "527"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Apr 2026 21:34:22 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-e1c/Cp0F0+YMAaVUZL0p4vHoRRrYNtLNpHjTqmLh+dw="
+        }
+      ]
+    }
+  ]
+}

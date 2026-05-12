@@ -1,0 +1,106 @@
+@model AdminSupportRequestsViewModel
+@{
+    ViewData["Title"] = "Обращения в поддержку";
+
+    string StatusTitle(string status) => status switch
+    {
+        "in_progress" => "В работе",
+        "closed" => "Закрыто",
+        _ => "Новое"
+    };
+}
+
+<section class="dashboard-grid">
+    <article class="stat-card">
+        <span>Всего обращений</span>
+        <strong>@Model.TotalCount</strong>
+        <small>Все статусы</small>
+    </article>
+    <article class="stat-card">
+        <span>Новые</span>
+        <strong>@Model.NewCount</strong>
+        <small>Требуют реакции</small>
+    </article>
+    <article class="stat-card">
+        <span>В работе</span>
+        <strong>@Model.InProgressCount</strong>
+        <small>Обрабатываются</small>
+    </article>
+    <article class="stat-card">
+        <span>Закрытые</span>
+        <strong>@Model.ClosedCount</strong>
+        <small>Решенные обращения</small>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Входящие обращения</h2>
+        <div class="chips">
+            <a class="chip @(string.IsNullOrWhiteSpace(Model.StatusFilter) ? "active" : string.Empty)" asp-action="Admin">Все</a>
+            <a class="chip @(Model.StatusFilter == "new" ? "active" : string.Empty)" asp-action="Admin" asp-route-status="new">Новые</a>
+            <a class="chip @(Model.StatusFilter == "in_progress" ? "active" : string.Empty)" asp-action="Admin" asp-route-status="in_progress">В работе</a>
+            <a class="chip @(Model.StatusFilter == "closed" ? "active" : string.Empty)" asp-action="Admin" asp-route-status="closed">Закрытые</a>
+        </div>
+    </div>
+
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Отправитель</th>
+                <th>Обращение</th>
+                <th>Статус</th>
+                <th>Ответ</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">Обращения не найдены.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <strong>@item.SenderName</strong>
+                            <div class="muted">@item.SenderEmail</div>
+                            <div class="muted">@((item.SenderRole == "teacher") ? "Преподаватель" : "Ученик")</div>
+                        </td>
+                        <td>
+                            <strong>@item.Subject</strong>
+                            <div class="muted">@item.Message</div>
+                        </td>
+                        <td>@StatusTitle(item.Status)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.AdminComment) ? "-" : item.AdminComment)</td>
+                        <td>
+                            <form asp-action="Update" method="post" class="grid-form support-admin-form">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <input type="hidden" name="statusFilter" value="@Model.StatusFilter" />
+                                <div class="input-block">
+                                    <select name="status">
+                                        <option value="new" selected="@(item.Status == "new")">Новое</option>
+                                        <option value="in_progress" selected="@(item.Status == "in_progress")">В работе</option>
+                                        <option value="closed" selected="@(item.Status == "closed")">Закрыто</option>
+                                    </select>
+                                </div>
+                                <div class="input-block">
+                                    <input name="adminComment" value="@item.AdminComment" placeholder="Комментарий администратора" maxlength="2000" />
+                                </div>
+                                <div class="input-block actions-row">
+                                    <button type="submit" class="btn primary small">Сохранить</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

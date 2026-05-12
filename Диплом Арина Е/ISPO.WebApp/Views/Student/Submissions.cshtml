@@ -1,0 +1,102 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model StudentSubmissionsViewModel
+@{
+    ViewData["Title"] = "Мои работы";
+}
+
+@if (!Model.HasLinkedProfile)
+{
+    <section class="flash flash-error">
+        Профиль студента не привязан к вашей учетной записи. Обратитесь к администратору.
+    </section>
+}
+else
+{
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Отправка работы</h2>
+            <a class="btn ghost" asp-action="Index">Назад в кабинет</a>
+        </div>
+        <p><strong>Ученик:</strong> @Model.StudentName</p>
+
+        <form asp-action="CreateSubmission" method="post" class="grid-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="input-block">
+                <label asp-for="Form.ScheduleId">Урок</label>
+                <select asp-for="Form.ScheduleId">
+                    <option value="">Выберите урок</option>
+                    @foreach (var lesson in Model.AvailableLessons)
+                    {
+                        <option value="@lesson.ScheduleId">
+                            @lesson.LessonDate.ToString("dd.MM.yyyy") @lesson.StartTime.ToString(@"hh\:mm") - @lesson.CourseTitle (@UiText.LessonStatus(lesson.LiveStatus))
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="Form.ScheduleId" class="field-validation"></span>
+            </div>
+
+            <div class="input-block">
+                <label asp-for="Form.CloudFileUrl">Ссылка на файл (https://)</label>
+                <input asp-for="Form.CloudFileUrl" placeholder="https://drive.google.com/..." />
+                <span asp-validation-for="Form.CloudFileUrl" class="field-validation"></span>
+            </div>
+
+            <div class="input-block full">
+                <label asp-for="Form.StudentComment">Комментарий</label>
+                <textarea asp-for="Form.StudentComment" rows="3" placeholder="Короткий комментарий для преподавателя"></textarea>
+                <span asp-validation-for="Form.StudentComment" class="field-validation"></span>
+            </div>
+
+            <div class="input-block actions-row">
+                <button type="submit" class="btn primary">Отправить на проверку</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <h2>История сдач</h2>
+        <table class="table-modern align-cols">
+            <thead>
+                <tr>
+                    <th>Курс</th>
+                    <th>Дата урока</th>
+                    <th>Файл</th>
+                    <th>Комментарий ученика</th>
+                    <th>Статус</th>
+                    <th>Балл</th>
+                    <th>Комментарий преподавателя</th>
+                    <th>Ревизия</th>
+                    <th>Отправлено</th>
+                    <th>Проверено</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr>
+                        <td colspan="10">Вы еще не отправляли работы.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.CourseTitle</td>
+                            <td>@item.LessonDate.ToString("dd.MM.yyyy")</td>
+                            <td><a href="@item.CloudFileUrl" target="_blank" rel="noopener noreferrer">Открыть</a></td>
+                            <td>@(string.IsNullOrWhiteSpace(item.StudentComment) ? "-" : item.StudentComment)</td>
+                            <td>@UiText.SubmissionStatus(item.Status)</td>
+                            <td>@(item.Score?.ToString("0.##") ?? "-")</td>
+                            <td>@(string.IsNullOrWhiteSpace(item.TeacherComment) ? "-" : item.TeacherComment)</td>
+                            <td>@item.RevisionNumber</td>
+                            <td>@item.SubmittedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@(item.ReviewedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </section>
+}

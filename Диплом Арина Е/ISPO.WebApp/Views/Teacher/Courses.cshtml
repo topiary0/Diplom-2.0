@@ -1,0 +1,54 @@
+﻿@model TeacherCoursesViewModel
+@{
+    ViewData["Title"] = "Мои курсы";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Назначенные курсы</h2>
+        <a class="btn ghost" asp-controller="Teacher" asp-action="Index">Назад в панель</a>
+    </div>
+    <p class="field-tip">Создание и удаление курсов выполняется администратором. Здесь доступен просмотр ваших курсов.</p>
+</section>
+
+<section class="panel">
+    <h2>Список курсов</h2>
+    <table class="table-modern align-cols">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Курс</th>
+                <th>Категория</th>
+                <th>Преподаватель</th>
+                <th>Часы</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Courses.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">Курсы пока не назначены.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var course in Model.Courses)
+                {
+                    <tr>
+                        <td>@course.CourseCode</td>
+                        <td>@course.Title</td>
+                        <td>@course.CategoryName</td>
+                        <td>@course.TeacherName</td>
+                        <td>@course.DurationHours</td>
+                        <td>
+                            <span class="badge @(course.IsActive ? "ok" : "warn")">
+                                @(course.IsActive ? "Активен" : "Неактивен")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

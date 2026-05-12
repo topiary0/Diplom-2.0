@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-05-04T17:20:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="ispo-navigation-map" name="Карта навигации ISPO">
+    <mxGraphModel dx="2200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Карта навигации веб-приложения ISPO" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="20" width="900" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="start" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1068" y="80" width="24" height="24" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="login" value="Страница входа&#xa;/Auth/Login" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="130" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="auth_check" value="Авторизация успешна?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="975" y="220" width="210" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="auth_error" value="Ошибка логина/пароля" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="240" width="230" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="role_router" value="Определение роли пользователя" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="930" y="360" width="300" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="admin_box" value="Администратор" style="swimlane;html=1;startSize=34;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="620" height="980" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher_box" value="Преподаватель" style="swimlane;html=1;startSize=34;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="460" width="620" height="980" as="geometry"/>
+        </mxCell>
+        <mxCell id="student_box" value="Студент" style="swimlane;html=1;startSize=34;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="460" width="620" height="980" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="admin_dash" value="Панель администратора&#xa;/Admin/Index" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="520" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_users" value="Пользователи&#xa;/Admin/Users" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="620" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_groups" value="Группы&#xa;/Admin/Groups" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="710" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_courses" value="Курсы&#xa;/Admin/Courses" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="800" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_schedule" value="Расписание&#xa;/Admin/Schedule" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="890" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_enroll" value="Зачисления&#xa;/Admin/Enrollments" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="980" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_reports" value="Отчеты&#xa;/Admin/Reports/*" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1070" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin_settings" value="Настройки профиля&#xa;/Profile/Admin" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1160" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="teacher_dash" value="Панель преподавателя&#xa;/Teacher/Index" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="520" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher_courses" value="Курсы&#xa;/Teacher/Courses" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="620" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher_lessons" value="Уроки&#xa;/Teacher/Lessons" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="710" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher_subm" value="Проверка работ&#xa;/Teacher/Submissions" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="800" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher_profile" value="Профиль&#xa;/Profile/Teacher" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="890" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="teacher_site" value="Настройки сайта&#xa;/Profile/TeacherSiteSettings" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="980" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="student_dash" value="Личный кабинет ученика&#xa;/Student/Index" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="520" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="student_subm" value="Мои работы&#xa;/Student/Submissions" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="620" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="student_profile" value="Профиль&#xa;/Profile/Student" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="710" width="260" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="student_site" value="Настройки сайта&#xa;/Profile/StudentSiteSettings" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="800" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="logout" value="Выход из системы&#xa;/Auth/Logout" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="1300" width="260" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="start" target="login"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="login" target="auth_check"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e3" value="Нет" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="auth_check" target="auth_error">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="270"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e4" value="Повтор входа" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="auth_error" target="login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="270"/>
+              <mxPoint x="590" y="160"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e5" value="Да" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="auth_check" target="role_router"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e6" value="role=admin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="role_router" target="admin_dash">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="430"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e7" value="role=teacher" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="role_router" target="teacher_dash"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="e8" value="role=student" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="role_router" target="student_dash">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1810" y="430"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="a1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_dash" target="admin_users"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_users" target="admin_groups"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_groups" target="admin_courses"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_courses" target="admin_schedule"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_schedule" target="admin_enroll"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_enroll" target="admin_reports"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="admin_reports" target="admin_settings"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="t1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="teacher_dash" target="teacher_courses"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="t2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="teacher_courses" target="teacher_lessons"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="t3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="teacher_lessons" target="teacher_subm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="t4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="teacher_subm" target="teacher_profile"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="t5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="teacher_profile" target="teacher_site"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="s1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="student_dash" target="student_subm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="s2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="student_subm" target="student_profile"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="s3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="student_profile" target="student_site"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="l1" value="Выход" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="admin_settings" target="logout">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="1330"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2" value="Выход" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="teacher_site" target="logout"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="l3" value="Выход" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="student_site" target="logout">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1650" y="1330"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="l4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="logout" target="login"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

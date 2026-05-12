@@ -1,0 +1,78 @@
+﻿@model TeacherProfileViewModel
+@{
+    ViewData["Title"] = "Профиль преподавателя";
+}
+
+@if (!Model.ProfileFound)
+{
+    <section class="flash flash-error">
+        Профиль преподавателя не найден. Обратитесь к администратору.
+    </section>
+}
+else
+{
+    <section class="dashboard-grid">
+        <article class="stat-card">
+            <span>Уроков на неделе</span>
+            <strong>@Model.LessonsThisWeek</strong>
+            <small>Ближайшие 7 дней</small>
+        </article>
+        <article class="stat-card">
+            <span>Работ на проверке</span>
+            <strong>@Model.PendingSubmissions</strong>
+            <small>Новые и в проверке</small>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Редактирование профиля</h2>
+            <a class="btn ghost" asp-controller="Teacher" asp-action="Index">Назад в панель</a>
+        </div>
+
+        <div class="actions-strip">
+            <a class="btn ghost" asp-controller="Profile" asp-action="TeacherSiteSettings">Настройки сайта</a>
+            <a class="btn ghost" asp-controller="Teacher" asp-action="Lessons">Мои уроки</a>
+            <a class="btn ghost" asp-controller="Teacher" asp-action="Submissions">Проверка работ</a>
+            <a class="btn ghost" asp-controller="Teacher" asp-action="Courses">Мои курсы</a>
+        </div>
+
+        <form asp-action="Teacher" method="post" class="grid-form profile-edit-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="input-block">
+                <label asp-for="Form.FullName">ФИО</label>
+                <input asp-for="Form.FullName" />
+                <span asp-validation-for="Form.FullName" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.Email">Электронная почта</label>
+            <input asp-for="Form.Email" placeholder="name.surname@spbstu.ru" />
+                <span asp-validation-for="Form.Email" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.Department">Отделение</label>
+                <input asp-for="Form.Department" />
+                <span asp-validation-for="Form.Department" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.PositionName">Должность</label>
+                <input asp-for="Form.PositionName" />
+                <span asp-validation-for="Form.PositionName" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.NewPassword">Новый пароль</label>
+                <input asp-for="Form.NewPassword" type="password" />
+                <span asp-validation-for="Form.NewPassword" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="Form.ConfirmPassword">Подтверждение пароля</label>
+                <input asp-for="Form.ConfirmPassword" type="password" />
+                <span asp-validation-for="Form.ConfirmPassword" class="field-validation"></span>
+            </div>
+            <div class="input-block actions-row">
+                <button type="submit" class="btn primary">Сохранить профиль</button>
+            </div>
+        </form>
+    </section>
+}

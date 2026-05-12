@@ -1,0 +1,53 @@
+﻿@model AdminTeachersViewModel
+@{
+    ViewData["Title"] = "Преподаватели";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Добавить преподавателя</h2>
+        <a class="btn ghost" asp-action="Index">Назад в панель</a>
+    </div>
+
+    <form asp-action="CreateTeacher" method="post" class="grid-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="input-block">
+            <label asp-for="Form.FullName">ФИО</label>
+            <input asp-for="Form.FullName" />
+            <span asp-validation-for="Form.FullName" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Email">Электронная почта</label>
+            <input asp-for="Form.Email" placeholder="name.surname@spbstu.ru" />
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.InitialPassword">Пароль для входа</label>
+            <input asp-for="Form.InitialPassword" type="password" />
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Department">Отделение</label>
+            <input asp-for="Form.Department" />
+            <span asp-validation-for="Form.Department" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.PositionName">Должность</label>
+            <input asp-for="Form.PositionName" />
+            <span asp-validation-for="Form.PositionName" class="field-validation"></span>
+        </div>
+        <div class="input-block full">
+            <p class="field-tip">После сохранения создается профиль преподавателя и учетная запись для входа.</p>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Добавить преподавателя</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Управление учетными записями</h2>
+    <p class="field-tip">Списки таблиц скрыты по вашему запросу. Для включения/отключения и удаления используйте раздел «Учетные записи входа».</p>
+    <div class="actions-strip">
+        <a class="btn ghost" asp-action="Users">Открыть учетные записи входа</a>
+    </div>
+</section>

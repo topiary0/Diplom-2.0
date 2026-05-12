@@ -1,0 +1,180 @@
+﻿@model AdminSettingsViewModel
+@{
+    ViewData["Title"] = "Настройки администратора";
+}
+
+<section class="dashboard-grid">
+    <article class="stat-card">
+        <span>Всего пользователей</span>
+        <strong>@Model.TotalUsers</strong>
+        <small>Все учетные записи</small>
+    </article>
+    <article class="stat-card">
+        <span>Активные пользователи</span>
+        <strong>@Model.ActiveUsers</strong>
+        <small>Доступ в систему</small>
+    </article>
+    <article class="stat-card">
+        <span>Онлайн-уроки</span>
+        <strong>@Model.LiveLessons</strong>
+        <small>Идут сейчас</small>
+    </article>
+    <article class="stat-card">
+        <span>Работы на проверке</span>
+        <strong>@Model.PendingSubmissions</strong>
+        <small>Ожидают преподавателя</small>
+    </article>
+    <article class="stat-card">
+        <span>Несвязанные преподаватели</span>
+        <strong>@Model.MissingTeacherAccounts</strong>
+        <small>Без входа в систему</small>
+    </article>
+    <article class="stat-card">
+        <span>Несвязанные ученики</span>
+        <strong>@Model.MissingStudentAccounts</strong>
+        <small>Без входа в систему</small>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Параметры учетной записи администратора</h2>
+        <a class="btn ghost" asp-controller="Admin" asp-action="Index">Назад в панель</a>
+    </div>
+
+    <form asp-action="Admin" method="post" class="grid-form admin-settings-form profile-edit-form">
+        <div class="input-block">
+            <label asp-for="Form.FullName">ФИО</label>
+            <input asp-for="Form.FullName" />
+            <span asp-validation-for="Form.FullName" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Email">Электронная почта</label>
+            <input asp-for="Form.Email" placeholder="name.surname@spbstu.ru" />
+            <span asp-validation-for="Form.Email" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.NewPassword">Новый пароль</label>
+            <input asp-for="Form.NewPassword" type="password" />
+            <span asp-validation-for="Form.NewPassword" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.ConfirmPassword">Подтверждение пароля</label>
+            <input asp-for="Form.ConfirmPassword" type="password" />
+            <span asp-validation-for="Form.ConfirmPassword" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Сохранить настройки</button>
+        </div>
+    </form>
+
+    <form asp-action="AdminSiteSettings" method="post" class="grid-form compact-form admin-settings-form admin-form-card">
+        <div class="input-block full">
+            <h3>Тема интерфейса администратора</h3>
+        </div>
+        <div class="input-block">
+            <label asp-for="SiteSettingsForm.Theme">Тема оформления</label>
+            <select asp-for="SiteSettingsForm.Theme">
+                <option value="light">Светлая</option>
+                <option value="dark">Темная</option>
+            </select>
+            <span asp-validation-for="SiteSettingsForm.Theme" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="SiteSettingsForm.InterfaceMode">Плотность интерфейса</label>
+            <select asp-for="SiteSettingsForm.InterfaceMode">
+                <option value="normal">Стандартная</option>
+                <option value="compact">Компактная</option>
+            </select>
+            <span asp-validation-for="SiteSettingsForm.InterfaceMode" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Сохранить настройки интерфейса</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Расширенные действия администратора</h2>
+    </div>
+
+    <div class="two-columns admin-actions-grid">
+        <form asp-action="ResetUserPassword" method="post" class="grid-form compact-form admin-settings-form admin-form-card admin-reset-form">
+            <div class="input-block full">
+                <h3>Сброс пароля пользователя</h3>
+            </div>
+            <div class="input-block">
+                <label asp-for="PasswordResetForm.Email">Адрес электронной почты пользователя</label>
+                <input asp-for="PasswordResetForm.Email" placeholder="name.surname@spbstu.ru" />
+                <span asp-validation-for="PasswordResetForm.Email" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="PasswordResetForm.NewPassword">Новый пароль</label>
+                <input asp-for="PasswordResetForm.NewPassword" type="password" />
+                <span asp-validation-for="PasswordResetForm.NewPassword" class="field-validation"></span>
+            </div>
+            <div class="input-block actions-row">
+                <button type="submit" class="btn primary">Сбросить пароль</button>
+            </div>
+        </form>
+
+        <form asp-action="ToggleRoleAccess" method="post" class="grid-form compact-form admin-settings-form admin-form-card admin-role-form">
+            <div class="input-block full">
+                <h3>Массовый доступ по роли</h3>
+            </div>
+            <div class="input-block">
+                <label asp-for="RoleAccessForm.Role">Роль</label>
+                <select asp-for="RoleAccessForm.Role">
+                    <option value="teacher">Преподаватели</option>
+                    <option value="student">Ученики</option>
+                    <option value="admin">Администраторы</option>
+                </select>
+                <span asp-validation-for="RoleAccessForm.Role" class="field-validation"></span>
+            </div>
+            <div class="input-block">
+                <label asp-for="RoleAccessForm.EnableAccess">Действие</label>
+                <select asp-for="RoleAccessForm.EnableAccess">
+                    <option value="true">Включить доступ</option>
+                    <option value="false">Отключить доступ</option>
+                </select>
+            </div>
+            <div class="input-block actions-row">
+                <button type="submit" class="btn primary">Применить</button>
+            </div>
+        </form>
+    </div>
+
+    <form asp-action="SyncAccounts" method="post" class="grid-form compact-form admin-settings-form admin-form-card admin-sync-form">
+        <div class="input-block full">
+            <h3>Автосоздание учетных записей</h3>
+            <p class="field-tip">Создает записи входа в таблице пользователей для преподавателей и учеников, у которых еще нет доступа в систему.</p>
+        </div>
+        <div class="input-block checkbox-block">
+            <label class="checkbox-control admin-checkbox-control"><input asp-for="SyncAccountsForm.IncludeTeachers" /> Создать для преподавателей</label>
+        </div>
+        <div class="input-block checkbox-block">
+            <label class="checkbox-control admin-checkbox-control"><input asp-for="SyncAccountsForm.IncludeStudents" /> Создать для учеников</label>
+        </div>
+        <div class="input-block">
+            <label asp-for="SyncAccountsForm.DefaultPassword">Пароль по умолчанию</label>
+            <input asp-for="SyncAccountsForm.DefaultPassword" type="password" />
+            <span asp-validation-for="SyncAccountsForm.DefaultPassword" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Выполнить автосоздание</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Сервисные действия</h2>
+    <div class="actions-strip">
+        <form asp-action="CloseAllLiveLessons" method="post">
+            <button type="submit" class="btn ghost">Завершить все онлайн-уроки</button>
+        </form>
+        <a class="btn ghost" asp-controller="Admin" asp-action="Users">Управление пользователями</a>
+        <a class="btn ghost" asp-controller="Admin" asp-action="Schedule">Расписание</a>
+        <a class="btn ghost" href="/Admin/Reports/Performance">Отчеты</a>
+    </div>
+</section>

@@ -1,0 +1,96 @@
+﻿@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+<section class="dashboard-grid">
+    <article class="stat-card">
+        <span>Пользователи</span>
+        <strong>@Model.UsersCount</strong>
+        <small>Активных: @Model.ActiveUsersCount</small>
+    </article>
+    <article class="stat-card">
+        <span>Студенты</span>
+        <strong>@Model.StudentsCount</strong>
+        <small>Учет контингента</small>
+    </article>
+    <article class="stat-card">
+        <span>Преподаватели</span>
+        <strong>@Model.TeachersCount</strong>
+        <small>Кадровый состав</small>
+    </article>
+    <article class="stat-card">
+        <span>Группы</span>
+        <strong>@Model.GroupsCount</strong>
+        <small>Учебные группы</small>
+    </article>
+    <article class="stat-card">
+        <span>Курсы</span>
+        <strong>@Model.CoursesCount</strong>
+        <small>Программы обучения</small>
+    </article>
+    <article class="stat-card accent">
+        <span>Занятия за 7 дней</span>
+        <strong>@Model.LessonsThisWeek</strong>
+        <small>Учебное расписание</small>
+    </article>
+    <article class="stat-card">
+        <span>Онлайн-уроки</span>
+        <strong>@Model.LiveLessonsCount</strong>
+        <small>Сейчас активны</small>
+    </article>
+    <article class="stat-card">
+        <span>Работы на проверке</span>
+        <strong>@Model.SubmissionsPendingCount</strong>
+        <small>Ожидают преподавателя</small>
+    </article>
+</section>
+
+<section class="actions-strip">
+    <a class="btn primary" asp-action="Users">Учетные записи входа</a>
+    <a class="btn primary" asp-action="Groups">Группы</a>
+    <a class="btn primary" asp-action="Courses">Курсы</a>
+    <a class="btn primary" asp-action="Schedule">Расписание</a>
+    <a class="btn primary" asp-action="Enrollments">Зачисления</a>
+    <a class="btn primary" href="/Admin/Reports/Performance">Отчеты</a>
+    <a class="btn primary" asp-controller="Support" asp-action="Admin">Поддержка</a>
+    <a class="btn ghost" asp-controller="Profile" asp-action="Admin">Настройки</a>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Популярные курсы</h2>
+        <a class="btn ghost" asp-action="Users">Управление учетными записями</a>
+    </div>
+
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Курс</th>
+                <th>Преподаватель</th>
+                <th>Зачислено</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.TopCourses.Count == 0)
+            {
+                <tr>
+                    <td colspan="4">Нет данных. Проверьте заполнение базы.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var course in Model.TopCourses)
+                {
+                    <tr>
+                        <td>@course.CourseCode</td>
+                        <td>@course.CourseTitle</td>
+                        <td>@course.TeacherName</td>
+                        <td>@course.StudentsEnrolled</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

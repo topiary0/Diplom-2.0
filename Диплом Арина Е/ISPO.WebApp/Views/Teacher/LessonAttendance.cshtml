@@ -1,0 +1,51 @@
+﻿@model TeacherLessonAttendanceViewModel
+@{
+    ViewData["Title"] = "Посещаемость урока";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>@Model.CourseTitle - @Model.GroupCode - @Model.LessonDate.ToString("dd.MM.yyyy")</h2>
+        <a class="btn ghost" asp-action="Lessons">Назад к урокам</a>
+    </div>
+
+    @if (Model.Items.Count == 0)
+    {
+        <section class="flash">В этой группе пока нет студентов.</section>
+    }
+    else
+    {
+        var presentCount = 0;
+        foreach (var student in Model.Items)
+        {
+            if (student.IsPresent)
+            {
+                presentCount++;
+            }
+        }
+
+        <form asp-action="SaveLessonAttendance" asp-route-scheduleId="@Model.ScheduleId" method="post" class="attendance-form">
+            <div class="attendance-summary">
+                <span>Студентов: @Model.Items.Count</span>
+                <span>Отмечено присутствующих: @presentCount</span>
+            </div>
+
+            <div class="attendance-list">
+                @foreach (var item in Model.Items)
+                {
+                    <article class="attendance-row-card">
+                        <div class="attendance-row-card__name">@item.StudentName</div>
+                        <label class="attendance-check attendance-check_compact">
+                            <input type="checkbox" name="presentStudentIds" value="@item.StudentId" checked="@item.IsPresent" />
+                            <span>Присутствовал</span>
+                        </label>
+                    </article>
+                }
+            </div>
+
+            <div class="actions-strip">
+                <button type="submit" class="btn primary">Сохранить посещаемость</button>
+            </div>
+        </form>
+    }
+</section>

@@ -1,0 +1,278 @@
+@using ISPO.WebApp.Infrastructure
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Уроки";
+
+    var prevAnchor = Model.Calendar.ViewMode == "month"
+        ? Model.Calendar.AnchorDate.AddMonths(-1)
+        : Model.Calendar.AnchorDate.AddDays(-7);
+    var nextAnchor = Model.Calendar.ViewMode == "month"
+        ? Model.Calendar.AnchorDate.AddMonths(1)
+        : Model.Calendar.AnchorDate.AddDays(7);
+    var weekDays = new[] { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
+}
+
+@if (!Model.HasLinkedProfile)
+{
+    <section class="flash flash-error">
+        Профиль ученика не найден по адресу электронной почты вашей учетной записи. Обратитесь к администратору для привязки профиля.
+    </section>
+}
+else if (Model.IsDemoProfile)
+{
+    <section class="flash flash-error">
+        Показан демонстрационный профиль, потому что по текущему адресу электронной почты не найдена прямая привязка в таблице студентов.
+    </section>
+}
+
+<section class="panel profile-panel">
+    <div class="panel-heading">
+        <h2>@Model.StudentName</h2>
+        <div class="row-actions">
+            <a class="btn primary" asp-action="Submissions">Мои сдачи</a>
+            <a class="btn ghost" asp-action="Index">В кабинет</a>
+        </div>
+    </div>
+    <p><strong>Группа:</strong> @Model.GroupCode (@Model.GroupName)</p>
+    <p><strong>Специализация:</strong> @Model.Specialization</p>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Календарь уроков</h2>
+        <div class="calendar-view-switch">
+            <a class="btn @(Model.Calendar.ViewMode == "week" ? "primary" : "ghost") small"
+               asp-action="Lessons"
+               asp-route-calendarView="week"
+               asp-route-calendarDate="@Model.Calendar.AnchorDate.ToString("yyyy-MM-dd")"
+               asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+               asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Неделя</a>
+            <a class="btn @(Model.Calendar.ViewMode == "month" ? "primary" : "ghost") small"
+               asp-action="Lessons"
+               asp-route-calendarView="month"
+               asp-route-calendarDate="@Model.Calendar.AnchorDate.ToString("yyyy-MM-dd")"
+               asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+               asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Месяц</a>
+        </div>
+    </div>
+
+    <form method="get" asp-action="Lessons" class="calendar-toolbar">
+        <input type="hidden" name="calendarView" value="@Model.Calendar.ViewMode" />
+        <label class="calendar-field">
+            <span>Опорная дата</span>
+            <input type="date" name="calendarDate" value="@Model.Calendar.AnchorDate.ToString("yyyy-MM-dd")" />
+        </label>
+        <label class="calendar-field">
+            <span>Курс</span>
+            <select name="calendarCourseId">
+                <option value="">Все курсы</option>
+                @foreach (var course in Model.Calendar.Courses)
+                {
+                    if (Model.Calendar.SelectedCourseId == course.Id)
+                    {
+                        <option value="@course.Id" selected>@course.Label</option>
+                    }
+                    else
+                    {
+                        <option value="@course.Id">@course.Label</option>
+                    }
+                }
+            </select>
+        </label>
+        <label class="calendar-field">
+            <span>Группа</span>
+            <select name="calendarGroupId">
+                @foreach (var group in Model.Calendar.Groups)
+                {
+                    if (Model.Calendar.SelectedGroupId == group.Id)
+                    {
+                        <option value="@group.Id" selected>@group.Label</option>
+                    }
+                    else
+                    {
+                        <option value="@group.Id">@group.Label</option>
+                    }
+                }
+            </select>
+        </label>
+        <button type="submit" class="btn primary">Применить</button>
+    </form>
+
+    <div class="calendar-nav">
+        <a class="btn ghost small"
+           asp-action="Lessons"
+           asp-route-calendarView="@Model.Calendar.ViewMode"
+           asp-route-calendarDate="@prevAnchor.ToString("yyyy-MM-dd")"
+           asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+           asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Назад</a>
+        <strong>@Model.Calendar.RangeLabel</strong>
+        <a class="btn ghost small"
+           asp-action="Lessons"
+           asp-route-calendarView="@Model.Calendar.ViewMode"
+           asp-route-calendarDate="@nextAnchor.ToString("yyyy-MM-dd")"
+           asp-route-calendarCourseId="@Model.Calendar.SelectedCourseId"
+           asp-route-calendarGroupId="@Model.Calendar.SelectedGroupId">Вперед</a>
+    </div>
+
+    @if (Model.Calendar.ViewMode == "month")
+    {
+        <div class="calendar-weekhead">
+            @foreach (var day in weekDays)
+            {
+                <span>@day</span>
+            }
+        </div>
+    }
+
+    <div class="lesson-calendar-grid @(Model.Calendar.ViewMode == "month" ? "month-mode" : "week-mode")">
+        @foreach (var day in Model.Calendar.Days)
+        {
+            <article class="calendar-day @(day.IsToday ? "is-today" : string.Empty) @(day.IsCurrentPeriod ? string.Empty : "is-outside")">
+                <header>
+                    <span>@day.Date.ToString("dd.MM")</span>
+                    <small>@day.Date.ToString("ddd")</small>
+                </header>
+                @if (day.Lessons.Count == 0)
+                {
+                    <p class="calendar-empty">Нет уроков</p>
+                }
+                else
+                {
+                    foreach (var lesson in day.Lessons)
+                    {
+                        <div class="calendar-lesson @UiText.LessonStatusBadgeClass(lesson.LiveStatus)">
+                            <strong>@lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")</strong>
+                            <span>@lesson.CourseTitle</span>
+                            <small>@lesson.GroupCode · @UiText.LessonStatus(lesson.LiveStatus)</small>
+                        </div>
+                    }
+                }
+            </article>
+        }
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Онлайн уроки</h2>
+        <a class="btn ghost" asp-action="Submissions">Сдать работу</a>
+    </div>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Курс</th>
+                <th>Ссылка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.LiveLessons.Count == 0)
+            {
+                <tr>
+                    <td colspan="4">Сейчас нет активных онлайн-уроков.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var lesson in Model.LiveLessons)
+                {
+                    <tr>
+                        <td>@lesson.LessonDate.ToString("dd.MM.yyyy")</td>
+                        <td>@lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")</td>
+                        <td>@lesson.CourseTitle</td>
+                        <td>
+                            @if (string.IsNullOrWhiteSpace(lesson.ConferenceUrl))
+                            {
+                                <span class="badge warn">Ссылка не задана</span>
+                            }
+                            else
+                            {
+                                <a class="btn primary small" href="@lesson.ConferenceUrl" target="_blank" rel="noopener noreferrer">Подключиться</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Материалы уроков</h2>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Курс</th>
+                <th>Урок</th>
+                <th>Материал</th>
+                <th>Тип</th>
+                <th>Ссылка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.LessonMaterials.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">Материалы пока не опубликованы.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.LessonMaterials)
+                {
+                    <tr>
+                        <td>@item.CourseTitle</td>
+                        <td>@item.LessonTitle</td>
+                        <td>@item.MaterialTitle</td>
+                        <td>@UiText.MaterialType(item.MaterialType)</td>
+                        <td><a href="@item.CloudUrl" target="_blank" rel="noopener noreferrer">Открыть</a></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Ближайшие занятия</h2>
+    <table class="table-modern compact">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Курс</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.UpcomingLessons.Count == 0)
+            {
+                <tr>
+                    <td colspan="4">Расписание не заполнено.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var lesson in Model.UpcomingLessons)
+                {
+                    <tr>
+                        <td>@lesson.LessonDate.ToString("dd.MM")</td>
+                        <td>@lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")</td>
+                        <td>@lesson.CourseTitle</td>
+                        <td>
+                            @if (lesson.LiveStatus == "live" && !string.IsNullOrWhiteSpace(lesson.ConferenceUrl))
+                            {
+                                <a href="@lesson.ConferenceUrl" target="_blank" rel="noopener noreferrer">Идет урок</a>
+                            }
+                            else
+                            {
+                                <span>@UiText.LessonStatus(lesson.LiveStatus)</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

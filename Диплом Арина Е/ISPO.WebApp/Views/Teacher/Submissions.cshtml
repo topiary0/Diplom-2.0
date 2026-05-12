@@ -1,0 +1,155 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model TeacherSubmissionsViewModel
+@{
+    ViewData["Title"] = "Проверка работ";
+
+    var workItems = Model.Items
+        .Where(x => x.Status == AppConstants.SubmissionStatus.New || x.Status == AppConstants.SubmissionStatus.InReview)
+        .ToList();
+
+    var followupItems = Model.Items
+        .Where(x => x.Status == AppConstants.SubmissionStatus.Revision || x.Status == AppConstants.SubmissionStatus.Accepted)
+        .ToList();
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Работы студентов</h2>
+        <div class="chips">
+            <a class="chip @(Model.StatusFilter is null ? "active" : string.Empty)" asp-action="Submissions">Все</a>
+            <a class="chip @(Model.StatusFilter == "new" ? "active" : string.Empty)" asp-action="Submissions" asp-route-status="new">Новые</a>
+            <a class="chip @(Model.StatusFilter == "in_review" ? "active" : string.Empty)" asp-action="Submissions" asp-route-status="in_review">На проверке</a>
+            <a class="chip @(Model.StatusFilter == "revision" ? "active" : string.Empty)" asp-action="Submissions" asp-route-status="revision">Доработка</a>
+            <a class="chip @(Model.StatusFilter == "accepted" ? "active" : string.Empty)" asp-action="Submissions" asp-route-status="accepted">Принятые</a>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <article class="stat-card">
+            <span>Всего работ</span>
+            <strong>@Model.Items.Count</strong>
+            <small>По текущему фильтру</small>
+        </article>
+        <article class="stat-card">
+            <span>Новые и на проверке</span>
+            <strong>@workItems.Count</strong>
+            <small>Требуют вашего ответа</small>
+        </article>
+        <article class="stat-card">
+            <span>Доработка/Принятые</span>
+            <strong>@followupItems.Count</strong>
+            <small>Обработанные работы</small>
+        </article>
+    </div>
+</section>
+
+@if (Model.Items.Count == 0)
+{
+    <section class="panel">
+        <p>Работы не найдены.</p>
+    </section>
+}
+else
+{
+    <section class="panel">
+        <h2>Новые и на проверке</h2>
+
+        @if (workItems.Count == 0)
+        {
+            <p>Сейчас нет новых работ.</p>
+        }
+        else
+        {
+            <div class="submission-grid">
+                @foreach (var row in workItems)
+                {
+                    <article class="submission-card">
+                        <div class="submission-card__head">
+                            <h3>@row.StudentName</h3>
+                            <span class="badge @UiText.SubmissionStatusBadgeClass(row.Status)">@UiText.SubmissionStatus(row.Status)</span>
+                        </div>
+
+                        <div class="submission-meta">
+                            <p><strong>Группа:</strong> @row.GroupCode</p>
+                            <p><strong>Курс:</strong> @row.CourseTitle</p>
+                            <p><strong>Урок:</strong> @row.LessonDate.ToString("dd.MM.yyyy")</p>
+                            <p><strong>Ревизия:</strong> @row.RevisionNumber</p>
+                            <p><strong>Сдано:</strong> @row.SubmittedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+                        </div>
+
+                        <p><strong>Файл:</strong> <a href="@row.CloudFileUrl" target="_blank" rel="noopener noreferrer">Открыть работу</a></p>
+                        <p><strong>Комментарий ученика:</strong> @(string.IsNullOrWhiteSpace(row.StudentComment) ? "-" : row.StudentComment)</p>
+
+                        <form asp-action="ReviewSubmission" asp-route-id="@row.Id" method="post" class="review-card-form">
+                            <input type="hidden" name="statusFilter" value="@Model.StatusFilter" />
+
+                            <div class="input-block">
+                                <label>Статус</label>
+                                <select name="Form.Status">
+                                    <option value="in_review" selected="@(row.Status == "in_review")">На проверке</option>
+                                    <option value="revision" selected="@(row.Status == "revision")">Доработка</option>
+                                    <option value="accepted" selected="@(row.Status == "accepted")">Принята</option>
+                                </select>
+                            </div>
+
+                            <div class="input-block">
+                                <label>Оценка</label>
+                                <input name="Form.Score" type="number" min="0" max="5" step="0.1" value="@row.Score" placeholder="0-5" />
+                            </div>
+
+                            <div class="input-block full">
+                                <label>Комментарий преподавателя</label>
+                                <textarea name="Form.TeacherComment" rows="3" placeholder="Комментарий по работе">@row.TeacherComment</textarea>
+                            </div>
+
+                            <div class="input-block actions-row">
+                                <button type="submit" class="btn primary">Сохранить проверку</button>
+                            </div>
+                        </form>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="panel">
+        <h2>Доработка и принятые</h2>
+
+        @if (followupItems.Count == 0)
+        {
+            <p>Здесь пока пусто.</p>
+        }
+        else
+        {
+            <table class="table-modern align-cols">
+                <thead>
+                    <tr>
+                        <th>Студент</th>
+                        <th>Группа</th>
+                        <th>Курс</th>
+                        <th>Статус</th>
+                        <th>Балл</th>
+                        <th>Комментарий</th>
+                        <th>Сдано</th>
+                        <th>Проверено</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in followupItems)
+                    {
+                        <tr>
+                            <td>@row.StudentName</td>
+                            <td>@row.GroupCode</td>
+                            <td>@row.CourseTitle</td>
+                            <td><span class="badge @UiText.SubmissionStatusBadgeClass(row.Status)">@UiText.SubmissionStatus(row.Status)</span></td>
+                            <td>@(row.Score?.ToString("0.##") ?? "-")</td>
+                            <td>@(string.IsNullOrWhiteSpace(row.TeacherComment) ? "-" : row.TeacherComment)</td>
+                            <td>@row.SubmittedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@(row.ReviewedAt?.ToLocalTime().ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+}

@@ -1,0 +1,166 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model TeacherLessonsViewModel
+@{
+    ViewData["Title"] = "Уроки";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Добавить урок</h2>
+        <a class="btn ghost" asp-action="Index">Назад в панель</a>
+    </div>
+
+    @if (Model.Courses.Count == 0)
+    {
+        <section class="flash flash-error">
+            У вас пока нет доступных курсов. Обратитесь к администратору для назначения курса.
+        </section>
+    }
+
+    <form asp-action="CreateLesson" method="post" class="grid-form profile-edit-form create-lesson-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="input-block">
+            <label asp-for="Form.CourseId">Курс</label>
+            <select asp-for="Form.CourseId">
+                <option value="">Выберите курс</option>
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.Id">@course.Label</option>
+                }
+            </select>
+            <span asp-validation-for="Form.CourseId" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.GroupId">Группа</label>
+            <select asp-for="Form.GroupId">
+                <option value="">Выберите группу</option>
+                @foreach (var group in Model.Groups)
+                {
+                    <option value="@group.Id">@group.Label</option>
+                }
+            </select>
+            <span asp-validation-for="Form.GroupId" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.LessonDate">Дата</label>
+            <input asp-for="Form.LessonDate" type="date" />
+            <span asp-validation-for="Form.LessonDate" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.StartTime">Начало</label>
+            <input asp-for="Form.StartTime" type="time" />
+            <span asp-validation-for="Form.StartTime" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.EndTime">Окончание</label>
+            <input asp-for="Form.EndTime" type="time" />
+            <span asp-validation-for="Form.EndTime" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.Room">Аудитория</label>
+            <input asp-for="Form.Room" />
+            <span asp-validation-for="Form.Room" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.LessonTopic">Тема</label>
+            <input asp-for="Form.LessonTopic" />
+            <span asp-validation-for="Form.LessonTopic" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.ConferenceUrl">Ссылка на конференцию</label>
+            <input asp-for="Form.ConferenceUrl" placeholder="https://meet.google.com/..." />
+            <span asp-validation-for="Form.ConferenceUrl" class="field-validation"></span>
+        </div>
+
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Создать урок</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Мои уроки</h2>
+    </div>
+
+    @if (Model.Lessons.Count == 0)
+    {
+        <section class="flash">Уроки не найдены.</section>
+    }
+    else
+    {
+        <div class="teacher-lessons-grid">
+            @foreach (var lesson in Model.Lessons)
+            {
+                <article class="teacher-lesson-card">
+                    <header class="teacher-lesson-card__top">
+                        <div>
+                            <h3>@lesson.CourseTitle</h3>
+                            <p class="teacher-lesson-card__subtitle">
+                                @lesson.LessonDate.ToString("dd.MM.yyyy"), @lesson.StartTime.ToString(@"hh\:mm") - @lesson.EndTime.ToString(@"hh\:mm")
+                            </p>
+                        </div>
+                        <span class="badge @UiText.LessonStatusBadgeClass(lesson.LiveStatus)">@UiText.LessonStatus(lesson.LiveStatus)</span>
+                    </header>
+
+                    <div class="teacher-lesson-meta">
+                        <div class="teacher-lesson-meta__item">
+                            <span class="lesson-label">Группа</span>
+                            <span class="lesson-value">@lesson.GroupCode</span>
+                        </div>
+                        <div class="teacher-lesson-meta__item teacher-lesson-meta__item_wide">
+                            <span class="lesson-label">Тема</span>
+                            <span class="lesson-value">@(string.IsNullOrWhiteSpace(lesson.Topic) ? "-" : lesson.Topic)</span>
+                        </div>
+                        <div class="teacher-lesson-meta__item">
+                            <span class="lesson-label">Материалы</span>
+                            <span class="lesson-value">@lesson.MaterialsCount</span>
+                        </div>
+                        <div class="teacher-lesson-meta__item">
+                            <span class="lesson-label">Сдачи</span>
+                            <span class="lesson-value">@lesson.SubmissionsCount</span>
+                        </div>
+                        <div class="teacher-lesson-meta__item teacher-lesson-meta__item_wide">
+                            <span class="lesson-label">Конференция</span>
+                            @if (string.IsNullOrWhiteSpace(lesson.ConferenceUrl))
+                            {
+                                <span class="lesson-value">-</span>
+                            }
+                            else
+                            {
+                                <a class="lesson-value" href="@lesson.ConferenceUrl" target="_blank" rel="noopener noreferrer">Открыть ссылку</a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="teacher-lesson-actions">
+                        <a class="btn ghost small" asp-action="EditLesson" asp-route-scheduleId="@lesson.ScheduleId">Редактировать</a>
+                        <a class="btn ghost small" asp-action="LessonMaterials" asp-route-scheduleId="@lesson.ScheduleId">Материалы</a>
+                        <a class="btn ghost small" asp-action="LessonAttendance" asp-route-scheduleId="@lesson.ScheduleId">Посещаемость</a>
+                        @if (lesson.LiveStatus != "live")
+                        {
+                            <form asp-action="StartLesson" asp-route-scheduleId="@lesson.ScheduleId" method="post">
+                                <button type="submit" class="btn primary small">Начать</button>
+                            </form>
+                        }
+                        @if (lesson.LiveStatus == "live")
+                        {
+                            <form asp-action="FinishLesson" asp-route-scheduleId="@lesson.ScheduleId" method="post">
+                                <button type="submit" class="btn danger small">Завершить</button>
+                            </form>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>
+

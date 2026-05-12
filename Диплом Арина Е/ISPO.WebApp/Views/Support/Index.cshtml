@@ -1,0 +1,82 @@
+@model SupportCenterViewModel
+@{
+    ViewData["Title"] = "Поддержка";
+
+    string StatusTitle(string status) => status switch
+    {
+        "in_progress" => "В работе",
+        "closed" => "Закрыто",
+        _ => "Новое"
+    };
+
+    string StatusBadgeClass(string status) => status switch
+    {
+        "closed" => "ok",
+        "in_progress" => "warn",
+        _ => "warn"
+    };
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Обращение в поддержку</h2>
+    </div>
+    <p>Опишите проблему или вопрос. Обращение будет отправлено администратору и появится в вашем списке ниже.</p>
+
+    <form asp-action="Create" method="post" class="grid-form support-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="input-block">
+            <label asp-for="Form.Subject">Тема</label>
+            <input asp-for="Form.Subject" maxlength="180" />
+            <span asp-validation-for="Form.Subject" class="field-validation"></span>
+        </div>
+        <div class="input-block full">
+            <label asp-for="Form.Message">Текст обращения</label>
+            <textarea asp-for="Form.Message" rows="5" maxlength="4000"></textarea>
+            <span asp-validation-for="Form.Message" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Отправить обращение</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Мои обращения</h2>
+    </div>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Тема</th>
+                <th>Статус</th>
+                <th>Ответ администратора</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr>
+                    <td colspan="4">Пока нет обращений.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <strong>@item.Subject</strong>
+                            <div class="muted">@item.Message</div>
+                        </td>
+                        <td><span class="badge @StatusBadgeClass(item.Status)">@StatusTitle(item.Status)</span></td>
+                        <td>@(string.IsNullOrWhiteSpace(item.AdminComment) ? "-" : item.AdminComment)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

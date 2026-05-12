@@ -1,0 +1,28 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/ISPO.WebApp/css/app.arqgftwnzi.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\app.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"arqgftwnzi"},{"Name":"integrity","Value":"sha256-ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA="},{"Name":"label","Value":"_content/ISPO.WebApp/css/app.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"50927"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 12 May 2026 17:14:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/ISPO.WebApp/css/app.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\app.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"50927"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022ilFKftFs2cjXQfVDFWgXtKs/vvK97y7qt30MNoeOYCA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 12 May 2026 17:14:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/ISPO.WebApp/js/landing.i43n64p33p.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\landing.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"i43n64p33p"},{"Name":"integrity","Value":"sha256-khX/D/gonqtlR6GitER5pN\u002Brh8RmEBpKiLjXck8Ebx4="},{"Name":"label","Value":"_content/ISPO.WebApp/js/landing.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1407"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022khX/D/gonqtlR6GitER5pN\u002Brh8RmEBpKiLjXck8Ebx4=\u0022"},{"Name":"Last-Modified","Value":"Mon, 13 Apr 2026 21:34:22 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/ISPO.WebApp/js/landing.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\landing.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-khX/D/gonqtlR6GitER5pN\u002Brh8RmEBpKiLjXck8Ebx4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1407"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022khX/D/gonqtlR6GitER5pN\u002Brh8RmEBpKiLjXck8Ebx4=\u0022"},{"Name":"Last-Modified","Value":"Mon, 13 Apr 2026 21:34:22 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

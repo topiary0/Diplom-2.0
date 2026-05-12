@@ -1,0 +1,144 @@
+@model AdminCoursesViewModel
+@{
+    ViewData["Title"] = "Курсы";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Добавить курс</h2>
+        <a class="btn ghost" asp-action="Index">Назад в панель</a>
+    </div>
+
+    <form asp-action="CreateCourse" method="post" class="grid-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="input-block">
+            <label asp-for="Form.CourseCode">Код курса</label>
+            <input asp-for="Form.CourseCode" />
+            <span asp-validation-for="Form.CourseCode" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Title">Название курса</label>
+            <input asp-for="Form.Title" />
+            <span asp-validation-for="Form.Title" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.CategoryId">Категория</label>
+            <select asp-for="Form.CategoryId">
+                <option value="0">Выберите категорию</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+            <span asp-validation-for="Form.CategoryId" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.TeacherId">Преподаватель</label>
+            <select asp-for="Form.TeacherId">
+                <option value="0">Выберите преподавателя</option>
+                @foreach (var teacher in Model.Teachers)
+                {
+                    <option value="@teacher.Id">@teacher.FullName</option>
+                }
+            </select>
+            <span asp-validation-for="Form.TeacherId" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.DurationHours">Часы</label>
+            <input asp-for="Form.DurationHours" type="number" min="1" max="1000" />
+            <span asp-validation-for="Form.DurationHours" class="field-validation"></span>
+        </div>
+        <div class="input-block full">
+            <label asp-for="Form.Description">Описание</label>
+            <textarea asp-for="Form.Description" rows="3"></textarea>
+            <span asp-validation-for="Form.Description" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Добавить курс</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>Список курсов</h2>
+    <table class="table-modern align-cols">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Курс</th>
+                <th>Категория</th>
+                <th>Преподаватель</th>
+                <th>Часы</th>
+                <th>Статус</th>
+                <th>Зачисл.</th>
+                <th>Занятия</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Courses.Count == 0)
+            {
+                <tr>
+                    <td colspan="10">Курсы пока не добавлены.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var course in Model.Courses)
+                {
+                    <tr>
+                        <td>
+                            <form asp-action="UpdateCourse" method="post" id="course-edit-@course.Id" class="table-inline-form">
+                                <input type="hidden" name="id" value="@course.Id" />
+                                <input name="courseCode" value="@course.CourseCode" />
+                            </form>
+                        </td>
+                        <td>
+                            <input name="title" value="@course.Title" form="course-edit-@course.Id" />
+                        </td>
+                        <td>
+                            <select name="categoryId" form="course-edit-@course.Id">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option value="@category.Id" selected="@(category.Id == course.CategoryId ? "selected" : null)">@category.Name</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select name="teacherId" form="course-edit-@course.Id">
+                                @foreach (var teacher in Model.Teachers)
+                                {
+                                    <option value="@teacher.Id" selected="@(teacher.Id == course.TeacherId ? "selected" : null)">@teacher.FullName</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" min="1" max="1000" name="durationHours" value="@course.DurationHours" form="course-edit-@course.Id" />
+                        </td>
+                        <td>
+                            <select name="isActive" form="course-edit-@course.Id">
+                                <option value="true" selected="@(course.IsActive ? "selected" : null)">Активен</option>
+                                <option value="false" selected="@(!course.IsActive ? "selected" : null)">Скрыт</option>
+                            </select>
+                        </td>
+                        <td>@course.EnrollmentsCount</td>
+                        <td>@course.LessonsCount</td>
+                        <td>
+                            <input name="description" value="@course.Description" form="course-edit-@course.Id" />
+                        </td>
+                        <td class="row-actions">
+                            <button type="submit" class="btn ghost small" form="course-edit-@course.Id">Сохранить</button>
+                            <form asp-action="DeleteCourse" method="post" onsubmit="return confirm('Удалить курс?');">
+                                <input type="hidden" name="id" value="@course.Id" />
+                                <button type="submit" class="btn danger small">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+

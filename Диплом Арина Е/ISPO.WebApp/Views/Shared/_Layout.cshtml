@@ -1,0 +1,146 @@
+﻿@using ISPO.WebApp.Infrastructure
+@{
+    var role = Context.Session.GetString(AppSession.UserRole)?.ToLowerInvariant() ?? string.Empty;
+    var userName = Context.Session.GetString(AppSession.UserName) ?? "Пользователь";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLowerInvariant() ?? string.Empty;
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString()?.ToLowerInvariant() ?? string.Empty;
+    var pageTitle = ViewData["Title"]?.ToString() ?? "ИСПО";
+    var currentUserId = Context.Session.GetInt32(AppSession.UserId);
+    var userScope = currentUserId.HasValue ? currentUserId.Value.ToString() : "guest";
+    var perUserThemeCookieKey = $"ISPO.SiteTheme.User.{userScope}";
+    var perUserInterfaceModeCookieKey = $"ISPO.InterfaceMode.User.{userScope}";
+
+    var rawTheme = Context.Request.Cookies[perUserThemeCookieKey] ?? "light";
+    var rawInterfaceMode = Context.Request.Cookies[perUserInterfaceModeCookieKey]
+        ?? Context.Request.Cookies["ISPO.InterfaceMode"]
+        ?? "normal";
+
+    var siteTheme = rawTheme.Trim().ToLowerInvariant() == "dark"
+        ? "theme-dark"
+        : "theme-light";
+    var interfaceClass = rawInterfaceMode.Trim().ToLowerInvariant() == "compact" ? "app-compact" : string.Empty;
+    var bodyClass = $"app-body {siteTheme} {interfaceClass}".Trim();
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle | ISPO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+</head>
+<body class="@bodyClass">
+    <div class="app-shell">
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="sidebar-toolbar">
+                <button type="button" class="sidebar-hamburger" id="sidebarToggle" aria-controls="appSidebar" aria-expanded="true" aria-label="Свернуть панель" title="Свернуть панель">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <span class="sidebar-toolbar-title">Главная страница</span>
+            </div>
+
+            <nav class="nav-stack">
+                @if (role == "admin")
+                {
+                    <a class="nav-link @(currentController == "admin" && currentAction == "index" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"></rect><rect x="13" y="3" width="8" height="5" rx="1.5"></rect><rect x="13" y="10" width="8" height="11" rx="1.5"></rect><rect x="3" y="13" width="8" height="8" rx="1.5"></rect></svg></span><span class="nav-link-text">Главная страница</span></a>
+                    <a class="nav-link @(currentController == "admin" && currentAction == "users" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Users"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3 19c0-3 2.5-5 6-5s6 2 6 5"></path><circle cx="17.5" cy="9" r="2.5"></circle><path d="M14.5 18.5c.4-2.1 2-3.5 4.5-3.5"></path></svg></span><span class="nav-link-text">Пользователи</span></a>
+                    <a class="nav-link @(currentController == "admin" && currentAction == "groups" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Groups"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4-8 4-8-4 8-4z"></path><path d="M4 12l8 4 8-4"></path><path d="M4 16l8 4 8-4"></path></svg></span><span class="nav-link-text">Группы</span></a>
+                    <a class="nav-link @(currentController == "admin" && currentAction == "courses" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Courses"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7a3 3 0 0 1 3 3v11H7a3 3 0 0 0-3 3V5z"></path><path d="M20 5h-7a3 3 0 0 0-3 3v11h7a3 3 0 0 1 3 3V5z"></path></svg></span><span class="nav-link-text">Курсы</span></a>
+                    <a class="nav-link @(currentController == "admin" && currentAction == "schedule" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Schedule"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nav-link-text">Расписание</span></a>
+                    <a class="nav-link @(currentController == "admin" && currentAction == "enrollments" ? "active" : string.Empty)" asp-controller="Admin" asp-action="Enrollments"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h10l3 3v13H4V7l3-3z"></path><path d="M8 12l3 3 5-5"></path></svg></span><span class="nav-link-text">Зачисления</span></a>
+                    <a class="nav-link @(currentController == "news" ? "active" : string.Empty)" asp-controller="News" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8M8 17h5"></path><path d="M4 9h3"></path></svg></span><span class="nav-link-text">Новости</span></a>
+                    <a class="nav-link @((currentController == "support") ? "active" : string.Empty)" asp-controller="Support" asp-action="Admin"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"></path><path d="M8 9h8M8 12h6"></path></svg></span><span class="nav-link-text">Поддержка</span></a>
+                    <a class="nav-link @((currentController == "admin" && currentAction.StartsWith("reports")) ? "active" : string.Empty)" href="/Admin/Reports/Performance"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V9"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20v-12"></path></svg></span><span class="nav-link-text">Отчеты</span></a>
+                    <a class="nav-link @(currentController == "profile" && currentAction == "admin" ? "active" : string.Empty)" asp-controller="Profile" asp-action="Admin"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"></circle><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1.4 1.4 0 0 1-2 2l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V19a1.4 1.4 0 0 1-2.8 0v-.2a1 1 0 0 0-.7-.9 1 1 0 0 0-1 .2l-.2.1a1.4 1.4 0 0 1-2-2l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H5a1.4 1.4 0 0 1 0-2.8h.2a1 1 0 0 0 .9-.7 1 1 0 0 0-.2-1L5.8 9a1.4 1.4 0 1 1 2-2l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V5a1.4 1.4 0 0 1 2.8 0v.2a1 1 0 0 0 .7.9 1 1 0 0 0 1-.2l.2-.1a1.4 1.4 0 1 1 2 2l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H19a1.4 1.4 0 0 1 0 2.8h-.2a1 1 0 0 0-.9.7z"></path></svg></span><span class="nav-link-text">Настройки</span></a>
+                }
+                else if (role == "teacher")
+                {
+                    <a class="nav-link @(currentController == "teacher" && currentAction == "index" ? "active" : string.Empty)" asp-controller="Teacher" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"></rect><rect x="13" y="3" width="8" height="5" rx="1.5"></rect><rect x="13" y="10" width="8" height="11" rx="1.5"></rect><rect x="3" y="13" width="8" height="8" rx="1.5"></rect></svg></span><span class="nav-link-text">Главная страница</span></a>
+                    <a class="nav-link @(currentController == "teacher" && currentAction == "courses" ? "active" : string.Empty)" asp-controller="Teacher" asp-action="Courses"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h7a3 3 0 0 1 3 3v11H7a3 3 0 0 0-3 3V5z"></path><path d="M20 5h-7a3 3 0 0 0-3 3v11h7a3 3 0 0 1 3 3V5z"></path></svg></span><span class="nav-link-text">Курсы</span></a>
+                    <a class="nav-link @(currentController == "teacher" && currentAction == "lessons" ? "active" : string.Empty)" asp-controller="Teacher" asp-action="Lessons"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"></rect><path d="M9 9l6 3-6 3V9z"></path><path d="M6 20h12"></path></svg></span><span class="nav-link-text">Уроки</span></a>
+                    <a class="nav-link @(currentController == "teacher" && currentAction == "submissions" ? "active" : string.Empty)" asp-controller="Teacher" asp-action="Submissions"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4h8l3 3v13H5V7l3-3z"></path><path d="M8 12l3 3 5-5"></path></svg></span><span class="nav-link-text">Проверка работ</span></a>
+                    <a class="nav-link @(currentController == "news" ? "active" : string.Empty)" asp-controller="News" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8M8 17h5"></path><path d="M4 9h3"></path></svg></span><span class="nav-link-text">Новости</span></a>
+                    <a class="nav-link @((currentController == "support") ? "active" : string.Empty)" asp-controller="Support" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"></path><path d="M8 9h8M8 12h6"></path></svg></span><span class="nav-link-text">Поддержка</span></a>
+                    <a class="nav-link @(currentController == "profile" && currentAction == "teacher" ? "active" : string.Empty)" asp-controller="Profile" asp-action="Teacher"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"></path></svg></span><span class="nav-link-text">Профиль</span></a>
+                    <a class="nav-link @(currentController == "profile" && currentAction == "teachersitesettings" ? "active" : string.Empty)" asp-controller="Profile" asp-action="TeacherSiteSettings"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"></circle><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1.4 1.4 0 0 1-2 2l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V19a1.4 1.4 0 0 1-2.8 0v-.2a1 1 0 0 0-.7-.9 1 1 0 0 0-1 .2l-.2.1a1.4 1.4 0 0 1-2-2l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H5a1.4 1.4 0 0 1 0-2.8h.2a1 1 0 0 0 .9-.7 1 1 0 0 0-.2-1L5.8 9a1.4 1.4 0 1 1 2-2l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V5a1.4 1.4 0 0 1 2.8 0v.2a1 1 0 0 0 .7.9 1 1 0 0 0 1-.2l.2-.1a1.4 1.4 0 1 1 2 2l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H19a1.4 1.4 0 0 1 0 2.8h-.2a1 1 0 0 0-.9.7z"></path></svg></span><span class="nav-link-text">Настройки сайта</span></a>
+                }
+                else if (role == "student")
+                {
+                    <a class="nav-link @(currentController == "student" && currentAction == "index" ? "active" : string.Empty)" asp-controller="Student" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"></rect><rect x="13" y="3" width="8" height="5" rx="1.5"></rect><rect x="13" y="10" width="8" height="11" rx="1.5"></rect><rect x="3" y="13" width="8" height="8" rx="1.5"></rect></svg></span><span class="nav-link-text">Главная страница</span></a>
+                    <a class="nav-link @(currentController == "student" && currentAction == "lessons" ? "active" : string.Empty)" asp-controller="Student" asp-action="Lessons"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span><span class="nav-link-text">Уроки</span></a>
+                    <a class="nav-link @(currentController == "student" && currentAction == "submissions" ? "active" : string.Empty)" asp-controller="Student" asp-action="Submissions"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"></path><path d="M15 3v4h4"></path><path d="M8 14l2.5 2.5L16 11"></path></svg></span><span class="nav-link-text">Мои работы</span></a>
+                    <a class="nav-link @(currentController == "news" ? "active" : string.Empty)" asp-controller="News" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8M8 17h5"></path><path d="M4 9h3"></path></svg></span><span class="nav-link-text">Новости</span></a>
+                    <a class="nav-link @((currentController == "support") ? "active" : string.Empty)" asp-controller="Support" asp-action="Index"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"></path><path d="M8 9h8M8 12h6"></path></svg></span><span class="nav-link-text">Поддержка</span></a>
+                    <a class="nav-link @(currentController == "profile" && currentAction == "student" ? "active" : string.Empty)" asp-controller="Profile" asp-action="Student"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"></path></svg></span><span class="nav-link-text">Профиль</span></a>
+                    <a class="nav-link @(currentController == "profile" && currentAction == "studentsitesettings" ? "active" : string.Empty)" asp-controller="Profile" asp-action="StudentSiteSettings"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"></circle><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1.4 1.4 0 0 1-2 2l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V19a1.4 1.4 0 0 1-2.8 0v-.2a1 1 0 0 0-.7-.9 1 1 0 0 0-1 .2l-.2.1a1.4 1.4 0 0 1-2-2l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H5a1.4 1.4 0 0 1 0-2.8h.2a1 1 0 0 0 .9-.7 1 1 0 0 0-.2-1L5.8 9a1.4 1.4 0 1 1 2-2l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V5a1.4 1.4 0 0 1 2.8 0v.2a1 1 0 0 0 .7.9 1 1 0 0 0 1-.2l.2-.1a1.4 1.4 0 1 1 2 2l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H19a1.4 1.4 0 0 1 0 2.8h-.2a1 1 0 0 0-.9.7z"></path></svg></span><span class="nav-link-text">Настройки сайта</span></a>
+                }
+            </nav>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-topbar">
+                <div>
+                    <h1>@pageTitle</h1>
+                    <p>@userName</p>
+                </div>
+                <div class="app-topbar-actions">
+                    <form asp-controller="Auth" asp-action="Logout" method="post">
+                        <button type="submit" class="btn ghost">Выйти</button>
+                    </form>
+                </div>
+            </header>
+
+            @if (TempData["Success"] is string successMessage)
+            {
+                <div class="flash flash-success">@successMessage</div>
+            }
+            @if (TempData["Error"] is string errorMessage)
+            {
+                <div class="flash flash-error">@errorMessage</div>
+            }
+
+            <main class="page-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const body = document.body;
+            const toggleButton = document.getElementById("sidebarToggle");
+            const mobileMedia = window.matchMedia("(max-width: 1050px)");
+
+            if (!body || !toggleButton) {
+                return;
+            }
+
+            const applySidebarState = (collapsed) => {
+                const effectiveCollapsed = mobileMedia.matches ? false : collapsed;
+                body.classList.toggle("sidebar-collapsed", effectiveCollapsed);
+                toggleButton.classList.toggle("is-collapsed", effectiveCollapsed);
+                toggleButton.setAttribute("aria-expanded", String(!effectiveCollapsed));
+                toggleButton.setAttribute("aria-label", effectiveCollapsed ? "Развернуть панель" : "Свернуть панель");
+                toggleButton.title = effectiveCollapsed ? "Развернуть панель" : "Свернуть панель";
+            };
+
+            applySidebarState(false);
+
+            toggleButton.addEventListener("click", () => {
+                applySidebarState(!body.classList.contains("sidebar-collapsed"));
+            });
+
+            mobileMedia.addEventListener("change", () => {
+                applySidebarState(body.classList.contains("sidebar-collapsed"));
+            });
+        })();
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

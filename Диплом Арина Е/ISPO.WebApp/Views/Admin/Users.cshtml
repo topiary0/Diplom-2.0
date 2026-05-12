@@ -1,0 +1,148 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model UserManagementViewModel
+@{
+    ViewData["Title"] = "Учетные записи входа";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Создать учетную запись</h2>
+        <a class="btn ghost" asp-controller="Admin" asp-action="Index">Назад в панель</a>
+    </div>
+
+    <p class="field-tip">
+        Для роли «ученик» автоматически создается профиль студента, для роли «преподаватель» - профиль преподавателя.
+    </p>
+
+    <form asp-action="CreateUser" method="post" class="grid-form admin-users-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="input-block">
+            <label asp-for="Form.FullName">ФИО</label>
+            <input asp-for="Form.FullName" />
+            <span asp-validation-for="Form.FullName" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Email">Электронная почта</label>
+            <input asp-for="Form.Email" placeholder="name.surname@spbstu.ru" />
+            <span asp-validation-for="Form.Email" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Password">Пароль</label>
+            <input asp-for="Form.Password" type="password" />
+            <span asp-validation-for="Form.Password" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Role">Роль</label>
+            <select asp-for="Form.Role" id="roleSelect">
+                <option value="student">Ученик</option>
+                <option value="teacher">Преподаватель</option>
+                <option value="admin">Администратор</option>
+            </select>
+            <span asp-validation-for="Form.Role" class="field-validation"></span>
+        </div>
+        <div class="input-block" id="groupBlock">
+            <label asp-for="Form.GroupId">Группа (для ученика)</label>
+            <select asp-for="Form.GroupId" id="groupSelect">
+                <option value="">Выберите группу</option>
+                @foreach (var group in Model.Groups)
+                {
+                    <option value="@group.Id">@group.GroupCode - @group.Name</option>
+                }
+            </select>
+            <span asp-validation-for="Form.GroupId" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Добавить пользователя</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Список учетных записей</h2>
+        <div class="chips">
+            <a class="chip @(Model.RoleFilter is null ? "active" : string.Empty)" asp-action="Users">Все</a>
+            <a class="chip @(Model.RoleFilter == "admin" ? "active" : string.Empty)" asp-action="Users" asp-route-role="admin">Админы</a>
+            <a class="chip @(Model.RoleFilter == "teacher" ? "active" : string.Empty)" asp-action="Users" asp-route-role="teacher">Преподаватели</a>
+            <a class="chip @(Model.RoleFilter == "student" ? "active" : string.Empty)" asp-action="Users" asp-route-role="student">Ученики</a>
+        </div>
+    </div>
+
+    <table class="table-modern align-cols">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Электронная почта</th>
+                <th>Роль</th>
+                <th>Статус</th>
+                <th>Создана</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Users.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">Учетные записи не найдены.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@UiText.Role(user.Role)</td>
+                        <td>
+                            <span class="badge @(user.IsActive ? "ok" : "warn")">
+                                @(user.IsActive ? "Активен" : "Отключен")
+                            </span>
+                        </td>
+                        <td>@user.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <div class="row-actions">
+                                <form asp-action="ToggleUserStatus" method="post">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn ghost small">
+                                        @(user.IsActive ? "Отключить" : "Включить")
+                                    </button>
+                                </form>
+                                <form asp-action="DeleteUser" method="post" onsubmit="return confirm('Удалить учетную запись?');">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn danger small">Удалить</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts {
+    <script>
+        (function () {
+            const roleSelect = document.getElementById("roleSelect");
+            const groupBlock = document.getElementById("groupBlock");
+            const groupSelect = document.getElementById("groupSelect");
+            if (!roleSelect || !groupBlock || !groupSelect) {
+                return;
+            }
+
+            const syncGroupVisibility = () => {
+                const isStudent = roleSelect.value === "student";
+                groupBlock.style.display = isStudent ? "grid" : "none";
+                groupSelect.disabled = !isStudent;
+                if (!isStudent) {
+                    groupSelect.value = "";
+                }
+            };
+
+            roleSelect.addEventListener("change", syncGroupVisibility);
+            syncGroupVisibility();
+        })();
+    </script>
+}

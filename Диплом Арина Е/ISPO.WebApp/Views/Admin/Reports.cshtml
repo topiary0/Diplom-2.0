@@ -1,0 +1,88 @@
+﻿@model AdminReportViewModel
+@{
+    ViewData["Title"] = Model.ReportTitle;
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>@Model.ReportTitle</h2>
+        <div class="chips">
+            <a class="chip @(Model.ReportKey == "performance" ? "active" : string.Empty)" href="/Admin/Reports/Performance">Успеваемость</a>
+            <a class="chip @(Model.ReportKey == "attendance" ? "active" : string.Empty)" href="/Admin/Reports/Attendance">Посещаемость</a>
+            <a class="chip @(Model.ReportKey == "course-activity" ? "active" : string.Empty)" href="/Admin/Reports/CourseActivity">Активность курсов</a>
+            <a class="chip @(Model.ReportKey == "teacher-load" ? "active" : string.Empty)" href="/Admin/Reports/TeacherLoad">Нагрузка преподавателей</a>
+            <a class="chip @(Model.ReportKey == "group-progress" ? "active" : string.Empty)" href="/Admin/Reports/GroupProgress">Прогресс групп</a>
+        </div>
+    </div>
+
+    <form method="get" class="grid-form">
+        <div class="input-block">
+            <label>Дата с</label>
+            <input type="date" name="dateFrom" value="@Model.Filter.DateFrom?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="input-block">
+            <label>Дата по</label>
+            <input type="date" name="dateTo" value="@Model.Filter.DateTo?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="input-block">
+            <label>Группа</label>
+            <select name="groupId">
+                <option value="">Все группы</option>
+                @foreach (var group in Model.Groups)
+                {
+                    <option value="@group.Id" selected="@(Model.Filter.GroupId == group.Id)">@group.Name</option>
+                }
+            </select>
+        </div>
+        <div class="input-block">
+            <label>Курс</label>
+            <select name="courseId">
+                <option value="">Все курсы</option>
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.Id" selected="@(Model.Filter.CourseId == course.Id)">@course.Name</option>
+                }
+            </select>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Применить фильтр</button>
+        </div>
+        <div class="input-block actions-row report-export-actions">
+            <button type="submit" class="btn ghost" name="format" value="csv">Экспорт CSV</button>
+            <button type="submit" class="btn ghost" name="format" value="pdf">Экспорт PDF</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <table class="table-modern align-cols">
+        <thead>
+            <tr>
+                @foreach (var head in Model.Headers)
+                {
+                    <th>@head</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Rows.Count == 0)
+            {
+                <tr>
+                    <td colspan="@Model.Headers.Count">@Model.EmptyMessage</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        @foreach (var cell in row)
+                        {
+                            <td>@cell</td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

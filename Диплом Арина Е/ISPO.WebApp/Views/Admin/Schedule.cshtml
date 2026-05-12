@@ -1,0 +1,154 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model AdminScheduleViewModel
+@{
+    ViewData["Title"] = "Расписание";
+}
+
+<section class="panel admin-schedule-panel">
+    <div class="panel-heading">
+        <h2>Добавить занятие</h2>
+        <a class="btn ghost" asp-action="Index">Назад в панель</a>
+    </div>
+    <form asp-action="CreateSchedule" method="post" class="grid-form profile-edit-form create-lesson-form admin-schedule-form">
+        <div class="input-block">
+            <label asp-for="Form.CourseId">Курс</label>
+            <select asp-for="Form.CourseId">
+                <option value="">Выберите курс</option>
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.Id">@course.CourseCode - @course.Title (@course.Teacher.FullName)</option>
+                }
+            </select>
+            <span asp-validation-for="Form.CourseId" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.GroupId">Группа</label>
+            <select asp-for="Form.GroupId">
+                <option value="">Выберите группу</option>
+                @foreach (var group in Model.Groups)
+                {
+                    <option value="@group.Id">@group.GroupCode - @group.Name</option>
+                }
+            </select>
+            <span asp-validation-for="Form.GroupId" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.LessonDate">Дата</label>
+            <input asp-for="Form.LessonDate" type="date" />
+            <span asp-validation-for="Form.LessonDate" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.StartTime">Начало</label>
+            <input asp-for="Form.StartTime" type="time" />
+            <span asp-validation-for="Form.StartTime" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.EndTime">Окончание</label>
+            <input asp-for="Form.EndTime" type="time" />
+            <span asp-validation-for="Form.EndTime" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.Room">Аудитория</label>
+            <input asp-for="Form.Room" />
+            <span asp-validation-for="Form.Room" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.LessonTopic">Тема</label>
+            <input asp-for="Form.LessonTopic" />
+            <span asp-validation-for="Form.LessonTopic" class="field-validation"></span>
+        </div>
+        <div class="input-block">
+            <label asp-for="Form.ConferenceUrl">Ссылка на конференцию</label>
+            <input asp-for="Form.ConferenceUrl" placeholder="https://..." />
+            <span asp-validation-for="Form.ConferenceUrl" class="field-validation"></span>
+        </div>
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Добавить занятие</button>
+        </div>
+    </form>
+</section>
+
+<section class="panel admin-schedule-panel">
+    <h2>Список занятий</h2>
+    <table class="table-modern align-cols schedule-table teacher-style-table">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Курс</th>
+                <th>Группа</th>
+                <th>Тема</th>
+                <th>Конференция</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr>
+                    <td colspan="8">Расписание пусто.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var row in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <form asp-action="UpdateSchedule" method="post" id="schedule-edit-@row.Id" class="table-inline-form">
+                                <input type="hidden" name="id" value="@row.Id" />
+                                <input type="hidden" name="room" value="@row.Room" />
+                                <input type="date" name="lessonDate" value="@row.LessonDate.ToString("yyyy-MM-dd")" />
+                            </form>
+                        </td>
+                        <td>
+                            <div class="time-pair">
+                                <input type="time" name="startTime" value="@row.StartTime.ToString(@"hh\:mm")" form="schedule-edit-@row.Id" />
+                                <input type="time" name="endTime" value="@row.EndTime.ToString(@"hh\:mm")" form="schedule-edit-@row.Id" />
+                            </div>
+                        </td>
+                        <td>
+                            <select name="courseId" form="schedule-edit-@row.Id">
+                                @foreach (var course in Model.Courses)
+                                {
+                                    <option value="@course.Id" selected="@(course.Id == row.CourseId)">@course.CourseCode - @course.Title</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select name="groupId" form="schedule-edit-@row.Id">
+                                @foreach (var group in Model.Groups)
+                                {
+                                    <option value="@group.Id" selected="@(group.Id == row.GroupId)">@group.GroupCode</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input name="lessonTopic" value="@row.LessonTopic" form="schedule-edit-@row.Id" />
+                        </td>
+                        <td>
+                            <input name="conferenceUrl" value="@row.ConferenceUrl" placeholder="https://..." form="schedule-edit-@row.Id" />
+                        </td>
+                        <td>
+                            <select name="liveStatus" form="schedule-edit-@row.Id">
+                                <option value="@AppConstants.LessonLiveStatus.Planned" selected="@(row.LiveStatus == AppConstants.LessonLiveStatus.Planned)">Запланировано</option>
+                                <option value="@AppConstants.LessonLiveStatus.Live" selected="@(row.LiveStatus == AppConstants.LessonLiveStatus.Live)">Идет урок</option>
+                                <option value="@AppConstants.LessonLiveStatus.Finished" selected="@(row.LiveStatus == AppConstants.LessonLiveStatus.Finished)">Завершено</option>
+                            </select>
+                        </td>
+                        <td class="row-actions">
+                            <button type="submit" class="btn ghost small" form="schedule-edit-@row.Id">Сохранить</button>
+                            <form asp-action="DeleteSchedule" method="post" onsubmit="return confirm('Удалить занятие?');">
+                                <input type="hidden" name="id" value="@row.Id" />
+                                <button type="submit" class="btn danger small">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+

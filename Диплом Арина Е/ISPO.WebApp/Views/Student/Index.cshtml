@@ -1,0 +1,165 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Личный кабинет ученика";
+}
+
+@if (!Model.HasLinkedProfile)
+{
+    <section class="flash flash-error">
+        Профиль ученика не найден по адресу электронной почты вашей учетной записи. Обратитесь к администратору для привязки профиля.
+    </section>
+}
+else if (Model.IsDemoProfile)
+{
+    <section class="flash flash-error">
+        Показан демонстрационный профиль, потому что по текущему адресу электронной почты не найдена прямая привязка в таблице студентов.
+    </section>
+}
+
+<section class="panel profile-panel">
+    <div class="panel-heading">
+        <h2>@Model.StudentName</h2>
+        <div class="row-actions">
+            <a class="btn primary" asp-action="Lessons">Мои уроки</a>
+            <a class="btn primary" asp-action="Submissions">Мои сдачи</a>
+            <a class="btn ghost" asp-controller="Support" asp-action="Index">Поддержка</a>
+            <a class="btn ghost" asp-controller="Profile" asp-action="Student">Профиль</a>
+            <a class="btn ghost" asp-controller="Profile" asp-action="StudentSiteSettings">Настройки сайта</a>
+        </div>
+    </div>
+    <p><strong>Группа:</strong> @Model.GroupCode (@Model.GroupName)</p>
+    <p><strong>Специализация:</strong> @Model.Specialization</p>
+</section>
+
+<section class="dashboard-grid">
+    <article class="stat-card">
+        <span>Активные курсы</span>
+        <strong>@Model.ActiveCoursesCount</strong>
+        <small>Текущий учебный период</small>
+    </article>
+    <article class="stat-card">
+        <span>Средний балл</span>
+        <strong>@(Model.AverageGrade?.ToString("0.0") ?? "-")</strong>
+        <small>По проверенным работам</small>
+    </article>
+    <article class="stat-card accent">
+        <span>Посещаемость</span>
+        <strong>@Model.AttendanceRate.ToString("0.0")%</strong>
+        <small>Процент присутствия</small>
+    </article>
+    <article class="stat-card">
+        <span>Онлайн-уроки</span>
+        <strong>@Model.LiveLessons.Count</strong>
+        <small>Подключение доступно во вкладке «Уроки»</small>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Последние отправленные работы</h2>
+        <a class="btn ghost" asp-action="Submissions">Открыть все сдачи</a>
+    </div>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Курс</th>
+                <th>Дата урока</th>
+                <th>Статус</th>
+                <th>Балл</th>
+                <th>Ревизия</th>
+                <th>Отправлено</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.LatestSubmissions.Count == 0)
+            {
+                <tr>
+                    <td colspan="6">Пока нет отправленных работ.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var row in Model.LatestSubmissions)
+                {
+                    <tr>
+                        <td>@row.CourseTitle</td>
+                        <td>@row.LessonDate.ToString("dd.MM.yyyy")</td>
+                        <td>@UiText.SubmissionStatus(row.Status)</td>
+                        <td>@(row.Score?.ToString("0.##") ?? "-")</td>
+                        <td>@row.RevisionNumber</td>
+                        <td>@row.SubmittedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Мои курсы</h2>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Курс</th>
+                <th>Преподаватель</th>
+                <th>Часы</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.EnrolledCourses.Count == 0)
+            {
+                <tr>
+                    <td colspan="5">Зачисления отсутствуют.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.EnrolledCourses)
+                {
+                    <tr>
+                        <td>@item.CourseCode</td>
+                        <td>@item.CourseTitle</td>
+                        <td>@item.TeacherName</td>
+                        <td>@item.DurationHours</td>
+                        <td>@UiText.EnrollmentStatus(item.Status)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Последние оценки</h2>
+    <table class="table-modern compact">
+        <thead>
+            <tr>
+                <th>Курс</th>
+                <th>Оценка</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RecentGrades.Count == 0)
+            {
+                <tr>
+                    <td colspan="3">Оценок пока нет.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var grade in Model.RecentGrades)
+                {
+                    <tr>
+                        <td>@grade.CourseTitle</td>
+                        <td>@grade.GradeValue.ToString("0.##")</td>
+                        <td>@grade.GradeDate.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,91 @@
+﻿@using ISPO.WebApp.Infrastructure
+@model TeacherEditLessonViewModel
+@{
+    ViewData["Title"] = "Редактирование урока";
+}
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>@Model.HeaderCourseTitle - @Model.HeaderGroupCode - @Model.HeaderLessonDate.ToString("dd.MM.yyyy")</h2>
+        <a class="btn ghost" asp-action="Lessons">Назад к урокам</a>
+    </div>
+
+    <form asp-action="EditLesson" asp-route-scheduleId="@Model.ScheduleId" method="post" class="grid-form profile-edit-form lesson-form edit-lesson-form">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <input type="hidden" asp-for="Form.ScheduleId" />
+
+        <div class="input-block">
+            <label asp-for="Form.CourseId">Курс</label>
+            <select asp-for="Form.CourseId">
+                <option value="">Выберите курс</option>
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.Id">@course.Label</option>
+                }
+            </select>
+            <span asp-validation-for="Form.CourseId" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.GroupId">Группа</label>
+            <select asp-for="Form.GroupId">
+                <option value="">Выберите группу</option>
+                @foreach (var group in Model.Groups)
+                {
+                    <option value="@group.Id">@group.Label</option>
+                }
+            </select>
+            <span asp-validation-for="Form.GroupId" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.LessonDate">Дата</label>
+            <input asp-for="Form.LessonDate" type="date" />
+            <span asp-validation-for="Form.LessonDate" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.StartTime">Начало</label>
+            <input asp-for="Form.StartTime" type="time" class="time-input" />
+            <span asp-validation-for="Form.StartTime" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.EndTime">Окончание</label>
+            <input asp-for="Form.EndTime" type="time" class="time-input" />
+            <span asp-validation-for="Form.EndTime" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.Room">Аудитория</label>
+            <input asp-for="Form.Room" />
+            <span asp-validation-for="Form.Room" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.LessonTopic">Тема</label>
+            <input asp-for="Form.LessonTopic" />
+            <span asp-validation-for="Form.LessonTopic" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.ConferenceUrl">Ссылка на конференцию</label>
+            <input asp-for="Form.ConferenceUrl" placeholder="https://meet.google.com/..." />
+            <span asp-validation-for="Form.ConferenceUrl" class="field-validation"></span>
+        </div>
+
+        <div class="input-block">
+            <label asp-for="Form.LiveStatus">Статус урока</label>
+            <select asp-for="Form.LiveStatus">
+                <option value="@AppConstants.LessonLiveStatus.Planned">@UiText.LessonStatus(AppConstants.LessonLiveStatus.Planned)</option>
+                <option value="@AppConstants.LessonLiveStatus.Live">@UiText.LessonStatus(AppConstants.LessonLiveStatus.Live)</option>
+                <option value="@AppConstants.LessonLiveStatus.Finished">@UiText.LessonStatus(AppConstants.LessonLiveStatus.Finished)</option>
+            </select>
+            <span asp-validation-for="Form.LiveStatus" class="field-validation"></span>
+        </div>
+
+        <div class="input-block actions-row">
+            <button type="submit" class="btn primary">Сохранить изменения</button>
+        </div>
+    </form>
+</section>
