@@ -6,7 +6,7 @@
 
 <section class="panel">
     <div class="panel-heading">
-        <h2>Создать учетную запись</h2>
+        <h2 id="userFormTitle">Создать учетную запись</h2>
         <a class="btn ghost" asp-controller="Admin" asp-action="Index">Назад в панель</a>
     </div>
 
@@ -14,8 +14,9 @@
         Для роли «ученик» автоматически создается профиль студента, для роли «преподаватель» - профиль преподавателя.
     </p>
 
-    <form asp-action="CreateUser" method="post" class="grid-form admin-users-form">
+    <form asp-action="CreateUser" method="post" class="grid-form admin-users-form" id="userForm">
         <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <input asp-for="Form.UserId" type="hidden" id="userIdInput" />
 
         <div class="input-block">
             <label asp-for="Form.FullName">ФИО</label>
@@ -29,7 +30,7 @@
         </div>
         <div class="input-block">
             <label asp-for="Form.Password">Пароль</label>
-            <input asp-for="Form.Password" type="password" />
+            <input asp-for="Form.Password" type="password" id="passwordInput" />
             <span asp-validation-for="Form.Password" class="field-validation"></span>
         </div>
         <div class="input-block">
@@ -53,7 +54,8 @@
             <span asp-validation-for="Form.GroupId" class="field-validation"></span>
         </div>
         <div class="input-block actions-row">
-            <button type="submit" class="btn primary">Добавить пользователя</button>
+            <button type="submit" class="btn primary" id="submitBtn">Добавить пользователя</button>
+            <button type="button" class="btn ghost" id="cancelEditBtn" style="display:none;">Отменить редактирование</button>
         </div>
     </form>
 </section>
@@ -91,7 +93,11 @@
             {
                 foreach (var user in Model.Users)
                 {
-                    <tr>
+                    <tr class="js-user-row"
+                        data-user-id="@user.Id"
+                        data-user-fullname="@user.FullName"
+                        data-user-email="@user.Email"
+                        data-user-role="@user.Role">
                         <td>@user.FullName</td>
                         <td>@user.Email</td>
                         <td>@UiText.Role(user.Role)</td>
@@ -128,7 +134,14 @@
             const roleSelect = document.getElementById("roleSelect");
             const groupBlock = document.getElementById("groupBlock");
             const groupSelect = document.getElementById("groupSelect");
-            if (!roleSelect || !groupBlock || !groupSelect) {
+            const userForm = document.getElementById("userForm");
+            const userIdInput = document.getElementById("userIdInput");
+            const formTitle = document.getElementById("userFormTitle");
+            const submitBtn = document.getElementById("submitBtn");
+            const cancelEditBtn = document.getElementById("cancelEditBtn");
+            const passwordInput = document.getElementById("passwordInput");
+
+            if (!roleSelect || !groupBlock || !groupSelect || !userForm || !userIdInput || !formTitle || !submitBtn || !cancelEditBtn || !passwordInput) {
                 return;
             }
 
@@ -143,6 +156,51 @@
 
             roleSelect.addEventListener("change", syncGroupVisibility);
             syncGroupVisibility();
+
+            const fullNameInput = document.getElementById("Form_FullName");
+            const emailInput = document.getElementById("Form_Email");
+            const userRows = document.querySelectorAll(".js-user-row");
+
+            const switchToCreate = () => {
+                userForm.action = '@Url.Action("CreateUser", "Admin")';
+                formTitle.textContent = "Создать учетную запись";
+                submitBtn.textContent = "Добавить пользователя";
+                cancelEditBtn.style.display = "none";
+                passwordInput.placeholder = "";
+                userIdInput.value = "";
+            };
+
+            const switchToEdit = () => {
+                userForm.action = '@Url.Action("UpdateUser", "Admin")';
+                formTitle.textContent = "Редактировать учетную запись";
+                submitBtn.textContent = "Сохранить изменения";
+                cancelEditBtn.style.display = "inline-flex";
+                passwordInput.placeholder = "Оставьте пустым, чтобы не менять";
+            };
+
+            cancelEditBtn.addEventListener("click", () => {
+                userForm.reset();
+                switchToCreate();
+                syncGroupVisibility();
+            });
+
+            userRows.forEach((row) => {
+                row.addEventListener("click", (event) => {
+                    if (event.target.closest(".row-actions")) {
+                        return;
+                    }
+
+                    switchToEdit();
+                    userIdInput.value = row.dataset.userId || "";
+                    fullNameInput.value = row.dataset.userFullname || "";
+                    emailInput.value = row.dataset.userEmail || "";
+                    roleSelect.value = row.dataset.userRole || "student";
+                    passwordInput.value = "";
+                    groupSelect.value = "";
+                    syncGroupVisibility();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+            });
         })();
     </script>
 }

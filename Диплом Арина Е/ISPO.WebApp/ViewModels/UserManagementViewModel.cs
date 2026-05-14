@@ -14,6 +14,8 @@ public class UserManagementViewModel
 
 public class CreateUserViewModel
 {
+    public int? UserId { get; set; }
+
     [Required(ErrorMessage = "Укажите ФИО пользователя.")]
     [StringLength(150)]
     public string FullName { get; set; } = string.Empty;
@@ -23,7 +25,6 @@ public class CreateUserViewModel
     [StringLength(120)]
     public string Email { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Введите пароль.")]
     [StringLength(100, MinimumLength = 6, ErrorMessage = "Минимальная длина пароля - 6 символов.")]
     public string Password { get; set; } = string.Empty;
 

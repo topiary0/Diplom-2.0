@@ -181,6 +181,9 @@ public class AdminController : Controller
         var role = form.Role.ToLowerInvariant();
         var password = form.Password;
 
+        if (string.IsNullOrWhiteSpace(password))
+            ModelState.AddModelError("Form.Password", "Введите пароль.");
+
         if (!ModelState.IsValid)
             return View("Users", await BuildUsersViewModelForValidationAsync(form));
 
@@ -282,6 +285,60 @@ public class AdminController : Controller
             _ => "Пользователь создан."
         };
 
+        return RedirectToAction(nameof(Users));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateUser([Bind(Prefix = "Form")] CreateUserViewModel? form)
+    {
+        form ??= new CreateUserViewModel();
+        form.FullName = (form.FullName ?? string.Empty).Trim();
+        form.Email = (form.Email ?? string.Empty).Trim();
+        form.Role = (form.Role ?? string.Empty).Trim();
+        form.Password = (form.Password ?? string.Empty).Trim();
+
+        var role = form.Role.ToLowerInvariant();
+        var email = form.Email.ToLowerInvariant();
+
+        if (!form.UserId.HasValue || form.UserId.Value <= 0)
+            ModelState.AddModelError("Form.UserId", "Не выбран пользователь для редактирования.");
+
+        if (role is not ("admin" or "teacher" or "student"))
+            ModelState.AddModelError("Form.Role", "Недопустимая роль.");
+
+        if (role == "student")
+        {
+            if (!form.GroupId.HasValue || form.GroupId.Value <= 0)
+            {
+                ModelState.AddModelError("Form.GroupId", "Для ученика необходимо выбрать группу.");
+            }
+        }
+
+        if (!ModelState.IsValid)
+            return View("Users", await BuildUsersViewModelForValidationAsync(form));
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == form.UserId.Value);
+        if (user is null)
+        {
+            TempData["Error"] = "Пользователь не найден.";
+            return RedirectToAction(nameof(Users));
+        }
+
+        if (await _db.Users.AnyAsync(u => u.Id != user.Id && u.Email != null && u.Email.Trim().ToLower() == email))
+            ModelState.AddModelError("Form.Email", "Пользователь с таким адресом электронной почты уже существует.");
+
+        if (!ModelState.IsValid)
+            return View("Users", await BuildUsersViewModelForValidationAsync(form));
+
+        user.FullName = form.FullName;
+        user.Email = email;
+        user.Role = role;
+        if (!string.IsNullOrWhiteSpace(form.Password))
+            user.PasswordHash = form.Password;
+
+        await _db.SaveChangesAsync();
+        TempData["Success"] = "Данные пользователя обновлены.";
         return RedirectToAction(nameof(Users));
     }
 
@@ -1805,7 +1862,6 @@ public class AdminController : Controller
         public int Count { get; set; }
     }
 }
-
 
 
 
