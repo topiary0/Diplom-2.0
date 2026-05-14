@@ -153,12 +153,28 @@ public class AdminController : Controller
         if (!string.IsNullOrWhiteSpace(normalizedRole))
             query = query.Where(u => u.Role == normalizedRole);
 
+        var users = await query.OrderByDescending(u => u.CreatedAt).ToListAsync();
+        var studentsByEmail = await _db.Students
+            .AsNoTracking()
+            .Where(s => s.Email != null && s.GroupId != 0)
+            .Select(s => new { Email = s.Email!.Trim().ToLower(), s.GroupId })
+            .ToListAsync();
+
+        var userGroupIds = new Dictionary<int, int?>();
+        foreach (var user in users)
+        {
+            var groupId = studentsByEmail
+                .FirstOrDefault(s => string.Equals(s.Email, user.Email?.Trim().ToLower(), StringComparison.Ordinal))?.GroupId;
+            userGroupIds[user.Id] = groupId;
+        }
+
         var vm = new UserManagementViewModel
         {
             UserFullName = HttpContext.Session.GetString(AppSession.UserName) ?? "Администратор",
             RoleFilter = normalizedRole,
-            Users = await query.OrderByDescending(u => u.CreatedAt).ToListAsync(),
+            Users = users,
             Groups = await _db.StudentGroups.AsNoTracking().OrderBy(g => g.GroupCode).ToListAsync(),
+            UserGroupIds = userGroupIds,
             Form = new CreateUserViewModel()
         };
 
@@ -179,7 +195,7 @@ public class AdminController : Controller
         var fullName = form.FullName;
         var email = form.Email.ToLowerInvariant();
         var role = form.Role.ToLowerInvariant();
-        var password = form.Password;
+        var password = form.Password ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(password))
             ModelState.AddModelError("Form.Password", "Введите пароль.");
@@ -296,7 +312,7 @@ public class AdminController : Controller
         form.FullName = (form.FullName ?? string.Empty).Trim();
         form.Email = (form.Email ?? string.Empty).Trim();
         form.Role = (form.Role ?? string.Empty).Trim();
-        form.Password = (form.Password ?? string.Empty).Trim();
+        form.Password = form.Password?.Trim();
 
         var role = form.Role.ToLowerInvariant();
         var email = form.Email.ToLowerInvariant();
@@ -336,6 +352,56 @@ public class AdminController : Controller
         user.Role = role;
         if (!string.IsNullOrWhiteSpace(form.Password))
             user.PasswordHash = form.Password;
+
+        if (role == "teacher")
+        {
+            var teacherProfile = await _db.Teachers.FirstOrDefaultAsync(t => t.Email != null && t.Email.Trim().ToLower() == email);
+            if (teacherProfile is null)
+            {
+                _db.Teachers.Add(new Teacher
+                {
+                    FullName = form.FullName,
+                    Email = email,
+                    Department = "Общее отделение",
+                    PositionName = "Преподаватель"
+                });
+            }
+            else
+            {
+                teacherProfile.FullName = form.FullName;
+                teacherProfile.Email = email;
+            }
+        }
+
+        if (role == "student" && form.GroupId.HasValue)
+        {
+            var nameParts = form.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var lastName = nameParts.Length > 0 ? nameParts[0] : "Ученик";
+            var firstName = nameParts.Length > 1 ? nameParts[1] : "Новый";
+            var middleName = nameParts.Length > 2 ? string.Join(' ', nameParts.Skip(2)) : null;
+
+            var studentProfile = await _db.Students.FirstOrDefaultAsync(s => s.Email != null && s.Email.Trim().ToLower() == email);
+            if (studentProfile is null)
+            {
+                _db.Students.Add(new Student
+                {
+                    LastName = lastName,
+                    FirstName = firstName,
+                    MiddleName = string.IsNullOrWhiteSpace(middleName) ? null : middleName,
+                    BirthDate = DateTime.Today.AddYears(-18),
+                    Email = email,
+                    GroupId = form.GroupId.Value
+                });
+            }
+            else
+            {
+                studentProfile.LastName = lastName;
+                studentProfile.FirstName = firstName;
+                studentProfile.MiddleName = string.IsNullOrWhiteSpace(middleName) ? null : middleName;
+                studentProfile.Email = email;
+                studentProfile.GroupId = form.GroupId.Value;
+            }
+        }
 
         await _db.SaveChangesAsync();
         TempData["Success"] = "Данные пользователя обновлены.";
@@ -1195,11 +1261,27 @@ public class AdminController : Controller
 
     private async Task<UserManagementViewModel> BuildUsersViewModelForValidationAsync(CreateUserViewModel form)
     {
+        var users = await _db.Users.AsNoTracking().OrderByDescending(u => u.CreatedAt).ToListAsync();
+        var studentsByEmail = await _db.Students
+            .AsNoTracking()
+            .Where(s => s.Email != null && s.GroupId != 0)
+            .Select(s => new { Email = s.Email!.Trim().ToLower(), s.GroupId })
+            .ToListAsync();
+
+        var userGroupIds = new Dictionary<int, int?>();
+        foreach (var user in users)
+        {
+            var groupId = studentsByEmail
+                .FirstOrDefault(s => string.Equals(s.Email, user.Email?.Trim().ToLower(), StringComparison.Ordinal))?.GroupId;
+            userGroupIds[user.Id] = groupId;
+        }
+
         return new UserManagementViewModel
         {
             UserFullName = HttpContext.Session.GetString(AppSession.UserName) ?? "Администратор",
-            Users = await _db.Users.AsNoTracking().OrderByDescending(u => u.CreatedAt).ToListAsync(),
+            Users = users,
             Groups = await _db.StudentGroups.AsNoTracking().OrderBy(g => g.GroupCode).ToListAsync(),
+            UserGroupIds = userGroupIds,
             Form = form
         };
     }
@@ -1862,8 +1944,6 @@ public class AdminController : Controller
         public int Count { get; set; }
     }
 }
-
-
 
 
 

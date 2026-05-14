@@ -97,7 +97,9 @@
                         data-user-id="@user.Id"
                         data-user-fullname="@user.FullName"
                         data-user-email="@user.Email"
-                        data-user-role="@user.Role">
+                        data-user-role="@user.Role"
+                        data-user-password="@user.PasswordHash"
+                        data-user-groupid="@Model.UserGroupIds.GetValueOrDefault(user.Id)">
                         <td>@user.FullName</td>
                         <td>@user.Email</td>
                         <td>@UiText.Role(user.Role)</td>
@@ -184,6 +186,16 @@
                 syncGroupVisibility();
             });
 
+            userForm.addEventListener("submit", (event) => {
+                if (!userIdInput.value && !passwordInput.value.trim()) {
+                    event.preventDefault();
+                    passwordInput.setCustomValidity("Введите пароль.");
+                    passwordInput.reportValidity();
+                    return;
+                }
+                passwordInput.setCustomValidity("");
+            });
+
             userRows.forEach((row) => {
                 row.addEventListener("click", (event) => {
                     if (event.target.closest(".row-actions")) {
@@ -195,8 +207,9 @@
                     fullNameInput.value = row.dataset.userFullname || "";
                     emailInput.value = row.dataset.userEmail || "";
                     roleSelect.value = row.dataset.userRole || "student";
-                    passwordInput.value = "";
-                    groupSelect.value = "";
+                    passwordInput.value = row.dataset.userPassword || "";
+                    groupSelect.value = row.dataset.userGroupid || "";
+                    passwordInput.setCustomValidity("");
                     syncGroupVisibility();
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 });
